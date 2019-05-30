@@ -65,7 +65,22 @@
 			type:"post",
 			data:$("[name=boardUpDelForm]").serialize(),
 			success:function(html){
-				
+				var upDelCnt = $(html).text();
+				upDelCnt=upDelCnt.split(" ").join("");
+				if(upDel=="up"){
+					if(upDelCnt==1){
+						alert("수정 성공");
+						location.replace("/z_jsp/boardListForm.do");
+					}
+					else{
+						alert("수정 실패");
+					}
+				}
+				else if(upDel=="del"){
+					if(upDelCnt==1){
+						
+					}
+				}
 			},
 			error:function(html){
 				alert("서버와 통신 실패!");
@@ -118,6 +133,7 @@
 
 
 				<input type="hidden" name="upDel" value="up"> 
+				<input type="hidden" name="b_no" value="${requestScope.boardDTO.b_no}">
 				<input type="button" value="수정" onClick="checkBoardUpDelForm('up')">
 				<input type="button" value="삭제" onClick="checkBoardUpDelForm('del')">
 				<input type="button" value="목록보기"

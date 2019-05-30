@@ -323,4 +323,70 @@ public class BoardDAO {
 			}
 		}
 	}
+	
+	public int updateBoard(BoardDTO board) throws Exception{
+		// DB 연동에 사용되는 Connection 객체, PreparedStatement 객체, Resultset 객체의 메위주를 저장할 변수 선언
+
+		// connection 객체 (db 연결하고 상태관리)
+		// preparedstatement 기능 => sql 구문을 관리하고 sql을 실행하는 객체
+		// resultset 객체 기능 => select sql 구문의 실행 결과값을 소유하고 있는 객체
+
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		ResultSet rs =null;
+	
+
+		// select SQL 구문 문자열을 저장할 StringBuffer 객체 생성하기
+		String sql = null;
+		try {
+			conn = getConnection();
+			conn.setAutoCommit(false);
+			sql = "update board set subject=?, writer=?, content=?, email=?, reg_date=sysdate where b_no=? and pwd=?";
+			pstm = conn.prepareStatement(sql);
+			pstm.setString(1, board.getSubject());
+			pstm.setString(2, board.getWriter());
+			pstm.setString(3, board.getContent());
+			pstm.setString(4, board.getEmail());
+			pstm.setInt(5, board.getB_no());
+			pstm.setString(6, board.getPwd());
+			
+			int boardUpCnt = pstm.executeUpdate();
+			
+			conn.commit();
+			
+			return boardUpCnt;
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("updateBoard(~) 메소드에서 예외발생");
+			conn.rollback();
+			return -1;
+		} finally {
+			if(rs !=  null) {
+				try {
+					rs.close();
+				}catch(SQLException sqle) {
+
+				}
+			}
+			if(pstm != null) {
+				try {
+					pstm.close();
+				}catch(SQLException sqle) {
+
+				}
+			}
+			if(conn != null) {
+				try {
+					conn.close();
+				}catch(SQLException sqle) {
+
+				}
+			}
+		}
+	}
+
+	public int deleteBoard(BoardDTO board) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
