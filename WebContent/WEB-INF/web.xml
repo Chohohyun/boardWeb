@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
+
+
+	<!--************************************************************-->
+	<!--[프로젝트명] 지정. -->
+	<!--************************************************************-->
+	<display-name>z_jsp</display-name>
+	<!--************************************************************-->
+	<!--[URL 주소]에 기본 응대하는 파일 지정 -->
+	<!--************************************************************-->
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+
+	<!--************************************************************-->
+	<!--<설정1>모든 [URL] 접속 시 대응하는 하나의 [컨트롤러 클래스] 이름과 별칭을 지정. -->
+	<!--<설정2>각각의 [URL 주소]에 대응하는 클래스를 매칭하는 [프로퍼티 파일] 경로 지정 -->
+	<!--************************************************************-->
+	<servlet>
+		<servlet-name>ControllerAction</servlet-name> <!-- 별칭 --> 
+		<servlet-class>com.naver.erp.ControllerAction</servlet-class> <!-- 클라이언트가 접속할 때 맞이하는 클래스 -->
+		<init-param>
+			<param-name>propertyConfig</param-name> <!-- 별칭 -->
+			<param-value>\WEB-INF\CommandPro.properties</param-value> <!--  -->
+		</init-param>
+	</servlet>
+
+	<!--************************************************************-->
+	<!--클라이언트가 접속하는 [URL 주소]의 확장자 지정하고 응대하는 [컨트롤러] 클래스의 별칭을 지정-->
+	<!--************************************************************-->
+	<servlet-mapping>
+		<servlet-name>ControllerAction</servlet-name>
+		<url-pattern>*.do</url-pattern> <!-- .do 라는 주소로 들어오면 ControllerAction으로 응대하라 -->
+	</servlet-mapping>
+
+</web-app>
