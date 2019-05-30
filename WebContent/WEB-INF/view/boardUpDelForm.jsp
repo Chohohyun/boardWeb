@@ -72,8 +72,11 @@
 						alert("수정 성공");
 						location.replace("/z_jsp/boardListForm.do");
 					}
+					else if(upDelCnt==0){
+						alert("비밀번호가 잘못 입력 되었습니다.");
+					}
 					else{
-						alert("수정 실패");
+						alert("서버쪽 DB 연동 실패!");
 					}
 				}
 				else if(upDel=="del"){
