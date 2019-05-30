@@ -14,6 +14,10 @@
 			document.boardRegForm.submit();
 			
 		}
+		function goBoardUpDelForm( ) {
+			document.boardUpDelForm.submit();
+		}
+		
 </script>
 <html>
 <head>
@@ -48,7 +52,7 @@
 	<input type="hidden" name="b_no" value="${board.b_no}">
 	<input type="button" value="글목록 보기" onclick="document.boardListForm.submit();">
 	<input type="button" value="댓글달기" onClick="goBoardRegForm()">&nbsp;
-	<input type="button" value="수정/삭제" onClick="goBoardUpDelForm">&nbsp;
+	<input type="button" value="수정/삭제" onClick="goBoardUpDelForm()">&nbsp;
 	</from>
 	<form name="boardListForm" method="post" action="/z_jsp/boardListForm.do">
 	
@@ -57,6 +61,11 @@
 		<!-- 게시판 상세보기 화면을 구성하는 글의 고유번호를 hidden 태그에 저장한다 -->
 		<!-- 댓글을 달려면 주인글의 고유번호를 알아야하기 때문이다. -->
 		<input type="hidden" name="b_no" value="${board.b_no }">	
+	</form>
+	<form name="boardUpDelForm" method="post" action="/z_jsp/boardUpDelForm.do">
+		<!-- 게시판 상세보기 화면을 구성하는 글의 고유번호를 hidden 태그에 저장한다 -->
+		<!-- 수정/삭제를 하려면 현재 글의 고유번호를 알아야하기 때문이다. -->
+		<input type="hidden" name="b_no" value="${board.b_no}">	
 	</form>
 </body>
 </html>

@@ -140,14 +140,14 @@ public class BoardDAO {
 			sql.append(",?");
 			sql.append(",?");
 			if (board.getB_no()==0 ) {
-		        sql.append( ",(select nvl(max(b_no), 0)+1 from board)" );
-		        sql.append( ",0" );
-		        sql.append( ",0" );
-	        }else {
-	        	sql.append( ",(select group_no from board where b_no="+board.getB_no()+")" );
-	        	sql.append( ",(select print_no+1 from board where b_no="+board.getB_no()+")" );
-	        	sql.append( ",(select print_level+1 from board where b_no="+board.getB_no()+")" );
-	        }
+				sql.append( ",(select nvl(max(b_no), 0)+1 from board)" );
+				sql.append( ",0" );
+				sql.append( ",0" );
+			}else {
+				sql.append( ",(select group_no from board where b_no="+board.getB_no()+")" );
+				sql.append( ",(select print_no+1 from board where b_no="+board.getB_no()+")" );
+				sql.append( ",(select print_level+1 from board where b_no="+board.getB_no()+")" );
+			}
 			sql.append(")");
 
 			pstm = conn.prepareStatement(sql.toString());
@@ -240,6 +240,64 @@ public class BoardDAO {
 		} catch (Exception e) {
 			conn.rollback();
 			return null;
+		}
+		finally {
+			if(rs !=  null) {
+				try {
+					rs.close();
+				}catch(SQLException sqle) {
+
+				}
+			}
+			if(pstm != null) {
+				try {
+					pstm.close();
+				}catch(SQLException sqle) {
+
+				}
+			}
+			if(conn != null) {
+				try {
+					conn.close();
+				}catch(SQLException sqle) {
+
+				}
+			}
+		}
+	}
+	public int getSonBoardCnt(int b_no) throws Exception{
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		ResultSet rs=null;
+		StringBuffer sql = new StringBuffer();
+		try {
+			conn = getConnection();
+			//StringBuffer 객체에 아들 댓글의 개수 검색 sql 구문 저장하기
+			System.out.println("여긴될까?");
+			sql.append(" select count(*) from board where ");
+			sql.append(" group_no = (select group_no from board where b_no="+b_no+") ");
+			sql.append(" and print_level = (select print_level+1 from board where b_no="+b_no+") ");
+			sql.append(" and print_no = (select print_no+1 from board where b_no="+b_no+") ");
+			// 아들 댓글의 개수 검색 sql 구문을 관리하는 PreraredStatement 객체 생성
+			pstm = conn.prepareStatement(sql.toString());
+
+			System.out.println("여긴될까?");
+			// 아들 댓글 개수 검색 sql 구문을 실행하여 검색 결과물 가진 ResultSet 객체 생성
+			rs = pstm.executeQuery();
+			// ResultSet 객체에서 아들 댓글의 개수를 꺼내어 sonBoardCnt에 저장하기
+			int sonBoardCnt = 0;
+
+			while(rs.next()) {
+				sonBoardCnt= rs.getInt(1);
+			}
+
+			// 검색 결과물을 가진 sonBoardCnt 변수 데이터를 리턴하기
+			return sonBoardCnt;
+
+		} catch (Exception e) {
+			// 예외 발생 시 도스 창에 경고 메세지 출력하기
+			System.out.println("getSonBoardCnt(~) 메소드에서 예외발생");// TODO: handle exception
+			return -1;
 		}
 		finally {
 			if(rs !=  null) {
