@@ -27,7 +27,7 @@
 			$("[name=key]").focus();
 			return;
 		}
-		.
+		
 	}
 </script>
 <html>
