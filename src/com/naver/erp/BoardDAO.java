@@ -196,23 +196,30 @@ public class BoardDAO {
 		ResultSet rs =null;
 		StringBuffer sql = new StringBuffer();
 		try {
+			// Connection 객체 생성
 			conn=getConnection();
 			conn.setAutoCommit(false);
-			
+
+
+
 			pstm=conn.prepareStatement("select count(*) from board where b_no=?");
 			pstm.setInt(1, b_no);
+			//PreparedStatement 객체 소유의 select문을 실행하여
+			//ResultSet 객체에 select 결과물을 저장하고 ResultSet 객체의 메위주를 리턴하기
 			rs = pstm.executeQuery();
+			// 게시판 글의 존재 개수를 저장할 변수 선언하기
 			int boardCnt=0;
+			// ResultSet 객체에서 게시판 글의 존재 개수를 꺼내기
 			while(rs.next()) {
 				boardCnt=rs.getInt(1);
 			}
 			if(boardCnt==0) {
 				return null;
 			}
-			
+
 			pstm.close();
-			
-			
+
+
 			pstm=conn.prepareStatement("update board set readcount=readcount+1 where b_no=?");
 			pstm.setInt(1, b_no);
 			pstm.executeUpdate();
@@ -338,7 +345,7 @@ public class BoardDAO {
 			}
 		}
 	}
-	
+
 	public int updateBoard(BoardDTO board) throws Exception{
 		// DB 연동에 사용되는 Connection 객체, PreparedStatement 객체, Resultset 객체의 메위주를 저장할 변수 선언
 
@@ -349,43 +356,43 @@ public class BoardDAO {
 		Connection conn = null;
 		PreparedStatement pstm = null;
 		ResultSet rs =null;
-	
+
 
 		// select SQL 구문 문자열을 저장할 StringBuffer 객체 생성하기
 		String sql = null;
 		try {
 			conn = getConnection();
 			conn.setAutoCommit(false);
-			
+
 			// 수정할 글의 개수 검색 sql 구문 저장하기
 			sql = "select count(*) from board where b_no=?";
-			
+
 			// 검색 sql 구문을 관리하는 preparedstatement객체 생성
 			pstm = conn.prepareStatement(sql);
-			
+
 			// 1번째 물음표에 정수로서 board.getB_no()의 리턴값 대체하기	
 			pstm.setInt(1, board.getB_no());
-			
+
 			// PreparedStatement객체 소유의 select문을 실행하여
 			// select 문 결과물을 얻어와서 resultset 객체 생성하고
 			// resultset 객체에 select 결과물을 저장하고 resultset 객체의 메위주를 리턴하기
 			rs= pstm.executeQuery();
-			
+
 			// 수정할 글의 개수를 저장할 변수 선언하기
 			int boardCnt=0;
-			
+
 			// resultset 객체에서 수정할 글의 개수를 꺼내기
 			while(rs.next()) {
 				boardCnt = rs.getInt(1);
 			}
-			
+
 			// 만약 수정할 글의 개수가 0이면, 즉 수정할 대상의 글이 없으면 -1 리턴하기
 			if(boardCnt==0) {
 				return -1;
 			}
 			pstm.close();
-			
-			
+
+
 			sql = "update board set subject=?, writer=?, content=?, email=?, reg_date=sysdate where b_no=? and pwd=?";
 			pstm = conn.prepareStatement(sql);
 			pstm.setString(1, board.getSubject());
@@ -394,11 +401,11 @@ public class BoardDAO {
 			pstm.setString(4, board.getEmail());
 			pstm.setInt(5, board.getB_no());
 			pstm.setString(6, board.getPwd());
-			
+
 			int boardUpCnt = pstm.executeUpdate();
-			
+
 			conn.commit();
-			
+
 			return boardUpCnt;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -430,8 +437,85 @@ public class BoardDAO {
 		}
 	}
 
-	public int deleteBoard(BoardDTO board) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int deleteBoard(BoardDTO board) throws Exception {
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		ResultSet rs =null;
+
+		String sql = null;
+
+		try {
+			int b_no = board.getB_no();
+			conn=getConnection();
+			conn.setAutoCommit(false);
+			sql="select count(*) from board where b_no=?";
+			pstm = conn.prepareStatement(sql);
+
+			pstm.setInt(1, board.getB_no());
+
+			rs=pstm.executeQuery();
+
+			int boardCnt=0;
+			while(rs.next()) {
+				boardCnt=rs.getInt(1);
+
+			}
+			if(boardCnt==0) {
+				return -1;
+			}
+			int sonBoardCnt = getSonBoardCnt(b_no);
+			if(sonBoardCnt>0) {
+				return -2;
+			}
+
+			pstm = conn.prepareStatement("update board set print_no=print_no-1 " + " where group_no=(select group_no from board where b_no=? and pwd=?)" +
+					" and print_no>(select print_no from board where b_no=? and pwd=?)");
+			pstm.setInt(1, board.getB_no());
+			pstm.setString(2, board.getPwd());
+			pstm.setInt(3, board.getB_no());
+			pstm.setString(4, board.getPwd());
+			int upPrint_noCnt=pstm.executeUpdate();
+			
+			
+			pstm=conn.prepareStatement("delete from board where b_no=? and pwd=?");
+			pstm.setInt(1, board.getB_no());
+			pstm.setString(2, board.getPwd());
+			int delCnt=pstm.executeUpdate();
+			if(delCnt==0) {
+				return -3;
+			}
+
+
+			conn.commit();
+			return 1;
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			conn.rollback();
+			System.out.println("deleteBoard()에서 에러발생");
+			return -4;
+		} finally {
+			if(rs !=  null) {
+				try {
+					rs.close();
+				}catch(SQLException sqle) {
+
+				}
+			}
+			if(pstm != null) {
+				try {
+					pstm.close();
+				}catch(SQLException sqle) {
+
+				}
+			}
+			if(conn != null) {
+				try {
+					conn.close();
+				}catch(SQLException sqle) {
+
+				}
+			}
+		}
 	}
 }

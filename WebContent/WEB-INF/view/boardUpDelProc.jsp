@@ -13,5 +13,10 @@
 		${requestScope.boardUpDelCnt}
 	</c:if>
 	
+	<c:if test="${requestScope.upDel=='del'}">
+		${requestScope.boardUpDelCnt}
+	</c:if>
+	
+	
 </body>
 </html>
