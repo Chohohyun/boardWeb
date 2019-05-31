@@ -41,20 +41,31 @@ public class BoardListFormAction implements CommandAction{
 			boardList.add(article);
 			*/
 			// httpserveletrequest 객체에 게시판 목록 저장하기
-			List<Map<String,String>> boardList = boardDAO.getBoardList();
+			String keyword = request.getParameter("keyword2");
+			System.out.println(keyword);
+			List<Map<String,String>> boardList = null;
+			if(keyword==null || keyword.equals("전체")) {
+				 boardList = boardDAO.getBoardList();
+			}
+			else {
+				boardList = boardDAO.getBoardList(keyword);
+			}
+
+			request.setAttribute("boardList", boardList);
+			if(boardList!=null) {
+				request.setAttribute("boardListCnt", boardList.size());
+				request.setAttribute("keyword", keyword);
+			}
+			
+			session.removeAttribute("keyword2");
 			// httpserveletrequest 객체에 저장된 데이터는 호출되는
 			// jsp 페이지에서 꺼낼 수 있다.
 						
-			request.setAttribute("boardList", boardList);
 			
 			// 게시판 목록 개수 저장
 			// httpservletrequest 객체에 게시판 목록 개수 저장하기
 			// httpservletrequest 객체에 저장된 데디터는 호출되는
 			// jsp 페이지에서 꺼낼 수 있다.
-			
-			if(boardList!=null) {
-			request.setAttribute("boardListCnt", boardList.size());
-			}
 			
 			
 		}

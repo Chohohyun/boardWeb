@@ -24,6 +24,106 @@ public class BoardDAO {
 
 		return DriverManager.getConnection(url,id,pw);
 	}
+
+	public List<Map<String,String>> getBoardList(String keyword) throws Exception{
+		// DB 연동에 사용되는 Connection 객체, PreparedStatement 객체, Resultset 객체의 메위주를 저장할 변수 선언
+
+		// connection 객체 (db 연결하고 상태관리)
+		// preparedstatement 기능 => sql 구문을 관리하고 sql을 실행하는 객체
+		// resultset 객체 기능 => select sql 구문의 실행 결과값을 소유하고 있는 객체
+
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		ResultSet rs =null;
+
+		// select SQL 구문 문자열을 저장할 StringBuffer 객체 생성하기
+		StringBuffer sql = new StringBuffer();
+		try {
+			conn = getConnection();
+		    
+			sql.append("select ");
+			sql.append(" b_no, ");
+			sql.append(" subject, ");
+			sql.append(" writer, ");
+			sql.append(" to_char(reg_date,'YYYY-MM-DD AM HH:MI:SS') reg_date, ");
+			sql.append(" readcount, ");
+			sql.append(" content, ");
+			sql.append(" pwd, ");
+			sql.append(" email, ");
+			sql.append(" group_no, ");
+			sql.append(" print_no, ");
+			sql.append(" print_level ");
+			sql.append(" from board b ");
+			sql.append(" where b.group_no in (select group_no from board where subject in (select subject from board where upper(subject) like upper( '%' || ? || '%')) "); 
+			sql.append("                                                                      or writer in (select writer from board where upper(writer) like upper( '%' || ? || '%')) ");
+			sql.append("                                                                    or content in (select content from board where upper(content) like upper( '%' || ? || '%')) ");
+			sql.append("                                                                       or email in (select email from board where upper(email) like upper( '%' || ? || '%')))");  
+			sql.append(" order by group_no desc, print_no asc ");
+			System.out.println(sql);
+			pstm = conn.prepareStatement(sql.toString());
+			//keyword="\'%" + keyword +"%\'";
+			System.out.println(keyword);
+			pstm.setString(1,keyword);
+			pstm.setString(2,keyword);
+			pstm.setString(3,keyword);
+			pstm.setString(4,keyword);
+			// PreparedStatement 객체 소유의 select 문을 실행하여
+			// 게시판 글 목록을 얻어와서 resultSet 객체 생성하고
+			// ResultSet 객체에 select 결과물을 저장하고 ResultSet 객체의 메위주를 리턴하기
+			rs=pstm.executeQuery();
+			//resultSet 객체에 저장된 n행 m열의 데이터 중에
+			// 한행의 데이터를 저장할 hashmap 객체의 메위주가 저장될 변수 boardMap 선언하기
+			Map<String,String> boardMap = null;
+			// 다량의 HashMap 객체가 저장될 ArrayList 객체를 생성하기
+			List<Map<String,String>> boardList = new ArrayList<Map<String,String>>();
+
+			System.out.println("여기됨");
+			//resultset 객체에서 게시판 글목록을 꺼내어
+			//
+			while (rs.next()) {
+				boardMap = new HashMap<String,String>();
+				boardMap.put("b_no",rs.getString("b_no"));
+				boardMap.put("subject",rs.getString("subject"));
+				boardMap.put("writer",rs.getString("writer"));
+				boardMap.put("reg_date",rs.getString("reg_date"));
+				boardMap.put("readcount",rs.getString("readcount"));
+				boardMap.put("content",rs.getString("content"));
+				boardMap.put("pwd",rs.getString("pwd"));
+				boardMap.put("email",rs.getString("email"));
+				boardMap.put("group_no",rs.getString("group_no"));
+				boardMap.put("print_no",rs.getString("print_no"));
+				boardMap.put("print_level",rs.getString("print_level"));
+				boardList.add(boardMap);
+			}
+			return boardList;
+		}catch(Exception e) {
+			System.out.println("에러발생");
+			return null;
+		}finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				}catch(SQLException sqle) {
+
+				}
+			}
+			if(pstm != null) {
+				try {
+					pstm.close();
+				}catch(SQLException sqle) {
+
+				}
+			}
+			if(conn != null) {
+				try {
+					conn.close();
+				}catch(SQLException sqle) {
+
+				}
+			}
+		}
+	}
+
 	public List<Map<String,String>> getBoardList() throws Exception{
 		// DB 연동에 사용되는 Connection 객체, PreparedStatement 객체, Resultset 객체의 메위주를 저장할 변수 선언
 
@@ -475,8 +575,8 @@ public class BoardDAO {
 			pstm.setInt(3, board.getB_no());
 			pstm.setString(4, board.getPwd());
 			int upPrint_noCnt=pstm.executeUpdate();
-			
-			
+
+
 			pstm=conn.prepareStatement("delete from board where b_no=? and pwd=?");
 			pstm.setInt(1, board.getB_no());
 			pstm.setString(2, board.getPwd());
@@ -518,7 +618,7 @@ public class BoardDAO {
 			}
 		}
 	}
-	
+
 	public int deleteBoard2(BoardDTO board) throws Exception {
 		Connection conn = null;
 		PreparedStatement pstm = null;
@@ -532,7 +632,7 @@ public class BoardDAO {
 			conn.setAutoCommit(false);
 			sql="select count(*) from board where b_no=?";
 			pstm = conn.prepareStatement(sql);
-				
+
 			pstm.setInt(1, board.getB_no());
 
 			rs=pstm.executeQuery();
@@ -547,7 +647,7 @@ public class BoardDAO {
 			if(boardCnt==0) {
 				return -1;
 			}
-			
+
 			// 암호에 따른 행 개수 검색 sql 구문 저장하기
 			sql = "select count(*) from board where b_no=? and pwd=?";
 			// 검색 sql 구문을 관리하는 preparedStatement 객체 생성
@@ -565,7 +665,7 @@ public class BoardDAO {
 			while(rs.next()) {
 				pwdCnt=rs.getInt(1);
 			}
-			
+
 			// 만약 암호에 따른 행 개수가 0개면 -2를 꺼내기
 			if(pwdCnt==0) {
 				return -2;
@@ -580,12 +680,12 @@ public class BoardDAO {
 			// 지워지는 게시판 글의 뒤 글들의 출력순서번호를 1씩 앞당기는 수정
 			pstm = conn.prepareStatement("update board set print_no=print_no-1 " + " where group_no=(select group_no from board where b_no=?) " +
 					" and print_no>(select print_no from board where b_no=?)");
-			
+
 			pstm.setInt(1, board.getB_no());
 			pstm.setInt(2, board.getB_no());
 			int upPrint_noCnt=pstm.executeUpdate();
-			
-			
+
+
 			pstm=conn.prepareStatement("delete from board where b_no=? ");
 			pstm.setInt(1, board.getB_no());
 			// PreparedStatement 객체 소유의 삭제 sql문을 실행하고

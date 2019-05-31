@@ -27,6 +27,9 @@
 			$("[name=key]").focus();
 			return;
 		}
+		$("[name=boardListForm] [name=keyword2]").val(key);
+		alert(key);
+		document.boardListForm.submit();
 		
 	}
 </script>
@@ -37,7 +40,7 @@
 </head>
 <body>
 	<center>
-		<input type="text" name="keyword">
+		<input type="text" name="keyword" value="${keyword}">
 		<input type="button" value = "검색" onClick="goSearch();"><br>
 		<br> <a href="javascript:goBoardRegForm();">[새 글쓰기]</a>
 		<table border=1>
@@ -67,6 +70,9 @@
 		<form name = "boardContentForm" method="post" action="/z_jsp/boardContentForm.do">
 			<input type="hidden" name="b_no">
 		
+		</form>
+		<form name = "boardListForm" method="post" action="/z_jsp/boardListForm.do">
+			<input type="hidden" name="keyword2">
 		</form>
 		
 	</center>
