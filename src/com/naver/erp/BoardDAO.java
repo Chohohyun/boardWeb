@@ -341,6 +341,20 @@ public class BoardDAO {
 		try {
 			conn = getConnection();
 			conn.setAutoCommit(false);
+			sql = "select count(*) from board where b_no=?";
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, board.getB_no());
+			rs= pstm.executeQuery();
+			int boardCnt=0;
+			while(rs.next()) {
+				boardCnt = rs.getInt(1);
+			}
+			if(boardCnt==0) {
+				return -1;
+			}
+			pstm.close();
+			
+			
 			sql = "update board set subject=?, writer=?, content=?, email=?, reg_date=sysdate where b_no=? and pwd=?";
 			pstm = conn.prepareStatement(sql);
 			pstm.setString(1, board.getSubject());
@@ -359,7 +373,7 @@ public class BoardDAO {
 			// TODO: handle exception
 			System.out.println("updateBoard(~) 메소드에서 예외발생");
 			conn.rollback();
-			return -1;
+			return -2;
 		} finally {
 			if(rs !=  null) {
 				try {

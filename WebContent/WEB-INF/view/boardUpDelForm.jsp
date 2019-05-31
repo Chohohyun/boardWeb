@@ -75,6 +75,10 @@
 					else if(upDelCnt==0){
 						alert("비밀번호가 잘못 입력 되었습니다.");
 					}
+					else if(upDelCnt==-1){
+						alert("이미 삭제된 게시물입니다.");
+						location.replace("/z_jsp/boardListForm.do");
+					}
 					else{
 						alert("서버쪽 DB 연동 실패!");
 					}
