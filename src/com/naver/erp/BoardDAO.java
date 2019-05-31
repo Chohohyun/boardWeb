@@ -198,6 +198,21 @@ public class BoardDAO {
 		try {
 			conn=getConnection();
 			conn.setAutoCommit(false);
+			
+			pstm=conn.prepareStatement("select count(*) from board where b_no=?");
+			pstm.setInt(1, b_no);
+			rs = pstm.executeQuery();
+			int boardCnt=0;
+			while(rs.next()) {
+				boardCnt=rs.getInt(1);
+			}
+			if(boardCnt==0) {
+				return null;
+			}
+			
+			pstm.close();
+			
+			
 			pstm=conn.prepareStatement("update board set readcount=readcount+1 where b_no=?");
 			pstm.setInt(1, b_no);
 			pstm.executeUpdate();
@@ -341,14 +356,30 @@ public class BoardDAO {
 		try {
 			conn = getConnection();
 			conn.setAutoCommit(false);
+			
+			// 수정할 글의 개수 검색 sql 구문 저장하기
 			sql = "select count(*) from board where b_no=?";
+			
+			// 검색 sql 구문을 관리하는 preparedstatement객체 생성
 			pstm = conn.prepareStatement(sql);
+			
+			// 1번째 물음표에 정수로서 board.getB_no()의 리턴값 대체하기	
 			pstm.setInt(1, board.getB_no());
+			
+			// PreparedStatement객체 소유의 select문을 실행하여
+			// select 문 결과물을 얻어와서 resultset 객체 생성하고
+			// resultset 객체에 select 결과물을 저장하고 resultset 객체의 메위주를 리턴하기
 			rs= pstm.executeQuery();
+			
+			// 수정할 글의 개수를 저장할 변수 선언하기
 			int boardCnt=0;
+			
+			// resultset 객체에서 수정할 글의 개수를 꺼내기
 			while(rs.next()) {
 				boardCnt = rs.getInt(1);
 			}
+			
+			// 만약 수정할 글의 개수가 0이면, 즉 수정할 대상의 글이 없으면 -1 리턴하기
 			if(boardCnt==0) {
 				return -1;
 			}
