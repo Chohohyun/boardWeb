@@ -532,43 +532,55 @@ public class BoardDAO {
 			conn.setAutoCommit(false);
 			sql="select count(*) from board where b_no=?";
 			pstm = conn.prepareStatement(sql);
-
+				
 			pstm.setInt(1, board.getB_no());
 
 			rs=pstm.executeQuery();
-
+			// 게시판 글의 개수가 저장되는 변수 선언하기
 			int boardCnt=0;
+			// ResultSet 객체에서 게시판 글의 개수를 꺼내기
 			while(rs.next()) {
 				boardCnt=rs.getInt(1);
 
 			}
-			System.out.println(boardCnt+"여기는?");
+			// 만약 게시판 글의 개수가 0이면 -1 리턴하기
 			if(boardCnt==0) {
 				return -1;
 			}
 			
+			// 암호에 따른 행 개수 검색 sql 구문 저장하기
 			sql = "select count(*) from board where b_no=? and pwd=?";
+			// 검색 sql 구문을 관리하는 preparedStatement 객체 생성
 			pstm = conn.prepareStatement(sql);
+			//1번째 물음표에 정수로서 board.getB_no()의 리턴값을 대체하기
+			//2번째 물음표에 문자로서 board.getPwd()의 리턴값을 대체하기
 			pstm.setInt(1, board.getB_no());
 			pstm.setString(2, board.getPwd());
+			// PreparedStatement 객체 소유의 select문을 실행하여
+			// select문 결과물을 저장한 ResultSet 객체의 메위주를 리턴하기
 			rs=pstm.executeQuery();
+			// 암호에 따른행 개수 저장할 변수 선언하기
 			int pwdCnt=0;
+			// ResultSet 객체에서 암호에 따른 행 개수를 꺼내기
 			while(rs.next()) {
 				pwdCnt=rs.getInt(1);
 			}
+			
+			// 만약 암호에 따른 행 개수가 0개면 -2를 꺼내기
 			if(pwdCnt==0) {
 				return -2;
 			}
-			
-			
-			
+			// 아들 글의 개수 구하기
+			// 만약 아들글이 있다면 -3 리턴
 			int sonBoardCnt = getSonBoardCnt(b_no);
 			if(sonBoardCnt>0) {
 				return -3;
 			}
-
+			// update sql 구문을 관리하는 PreparedStatement 객체 생성하기
+			// 지워지는 게시판 글의 뒤 글들의 출력순서번호를 1씩 앞당기는 수정
 			pstm = conn.prepareStatement("update board set print_no=print_no-1 " + " where group_no=(select group_no from board where b_no=?) " +
 					" and print_no>(select print_no from board where b_no=?)");
+			
 			pstm.setInt(1, board.getB_no());
 			pstm.setInt(2, board.getB_no());
 			int upPrint_noCnt=pstm.executeUpdate();
@@ -576,14 +588,20 @@ public class BoardDAO {
 			
 			pstm=conn.prepareStatement("delete from board where b_no=? ");
 			pstm.setInt(1, board.getB_no());
+			// PreparedStatement 객체 소유의 삭제 sql문을 실행하고
+			// 삭제 행의 적용 개수를 리턴하여 변수에 저장하기
 			int delCnt=pstm.executeUpdate();
+			// 트랜잭션 작업 인정하기
 			conn.commit();
+			// 1 리턴하기, 1을 리턴하면 모든 작업은 제대로 되었음을 말한다.
 			return 1;
 
 		} catch (Exception e) {
-			// TODO: handle exception
+			// 트랜잭션 작업 취소하기
 			conn.rollback();
+			// 예외 발생 시 도스창에 경고 메세지를 출력하기
 			System.out.println("deleteBoard()에서 에러발생");
+			// -4 러틴하기, -4을 리턴하면 예외가 발생했음을 말한다.
 			return -4;
 		} finally {
 			if(rs !=  null) {

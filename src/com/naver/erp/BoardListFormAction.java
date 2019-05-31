@@ -18,10 +18,10 @@ public class BoardListFormAction implements CommandAction{
 		try {
 			HttpSession session = request.getSession();
 			
-			String admin_id= (String)session.getAttribute("admin_id");
-			if(admin_id==null) {
-				return "/WEB-INF/view/loginForm.jsp";
-			}
+			//String admin_id= (String)session.getAttribute("admin_id");
+			//if(admin_id==null) {
+				//return "/WEB-INF/view/loginForm.jsp";
+			//}
 			BoardDAO boardDAO = BoardDAO.getInstance();
 			/*List<Map<String,String>> boardList = new ArrayList<Map<String,String>>();
 			Map<String,String> article = new HashMap<String,String>();

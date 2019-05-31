@@ -7,13 +7,8 @@
 <script src="/z_jsp/resources/jquery-1.11.0.min.js"></script>
 <!--  JSTL 커스텀 태그와 EL을 사용하여 HttpSession 객체에 로그인 아이디가 없으면 경고하고 로그인 화면으로 이동 시키기-->
 <!--  만약 세션객체에 admin_id라는 키값으로 저장된 놈이 없다면.. -->
-<c:if test="${empty sessionScope.admin_id }">
 
-	<script>
-		//alert("로그인 요망");
-		//location.replace("/z_jsp/loginForm.do");
-	</script>
-</c:if>
+<%@include file="checkLogin.jsp" %>
 <script>
 	function goBoardRegForm(){
 		// name = boardRegForm을 가진 form 태그안의 action에 설정된 URL 로 이동하기
@@ -25,6 +20,15 @@
 
 		document.boardContentForm.submit();
 	}
+	function goSearch(){
+		var key = $("[name=keyword]").val();
+		if (key.split(" ").join("") == "") {
+			alert("키워드를 입력해 주십시요");
+			$("[name=key]").focus();
+			return;
+		}
+		.
+	}
 </script>
 <html>
 <head>
@@ -33,6 +37,8 @@
 </head>
 <body>
 	<center>
+		<input type="text" name="keyword">
+		<input type="button" value = "검색" onClick="goSearch();"><br>
 		<br> <a href="javascript:goBoardRegForm();">[새 글쓰기]</a>
 		<table border=1>
 			<tr>
