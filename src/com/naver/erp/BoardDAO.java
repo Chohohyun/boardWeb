@@ -518,4 +518,95 @@ public class BoardDAO {
 			}
 		}
 	}
+	
+	public int deleteBoard2(BoardDTO board) throws Exception {
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		ResultSet rs =null;
+
+		String sql = null;
+
+		try {
+			int b_no = board.getB_no();
+			conn=getConnection();
+			conn.setAutoCommit(false);
+			sql="select count(*) from board where b_no=?";
+			pstm = conn.prepareStatement(sql);
+
+			pstm.setInt(1, board.getB_no());
+
+			rs=pstm.executeQuery();
+
+			int boardCnt=0;
+			while(rs.next()) {
+				boardCnt=rs.getInt(1);
+
+			}
+			System.out.println(boardCnt+"여기는?");
+			if(boardCnt==0) {
+				return -1;
+			}
+			
+			sql = "select count(*) from board where b_no=? and pwd=?";
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, board.getB_no());
+			pstm.setString(2, board.getPwd());
+			rs=pstm.executeQuery();
+			int pwdCnt=0;
+			while(rs.next()) {
+				pwdCnt=rs.getInt(1);
+			}
+			if(pwdCnt==0) {
+				return -2;
+			}
+			
+			
+			
+			int sonBoardCnt = getSonBoardCnt(b_no);
+			if(sonBoardCnt>0) {
+				return -3;
+			}
+
+			pstm = conn.prepareStatement("update board set print_no=print_no-1 " + " where group_no=(select group_no from board where b_no=?) " +
+					" and print_no>(select print_no from board where b_no=?)");
+			pstm.setInt(1, board.getB_no());
+			pstm.setInt(2, board.getB_no());
+			int upPrint_noCnt=pstm.executeUpdate();
+			
+			
+			pstm=conn.prepareStatement("delete from board where b_no=? ");
+			pstm.setInt(1, board.getB_no());
+			int delCnt=pstm.executeUpdate();
+			conn.commit();
+			return 1;
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			conn.rollback();
+			System.out.println("deleteBoard()에서 에러발생");
+			return -4;
+		} finally {
+			if(rs !=  null) {
+				try {
+					rs.close();
+				}catch(SQLException sqle) {
+
+				}
+			}
+			if(pstm != null) {
+				try {
+					pstm.close();
+				}catch(SQLException sqle) {
+
+				}
+			}
+			if(conn != null) {
+				try {
+					conn.close();
+				}catch(SQLException sqle) {
+
+				}
+			}
+		}
+	}
 }

@@ -41,7 +41,7 @@ public class BoardUpDelProcAction implements CommandAction {
 			
 			// 만약 삭제모드면 
 			else if(upDel.equals("del")) {
-				boardUpDelCnt=boardDAO.deleteBoard(boardDTO);
+				boardUpDelCnt=boardDAO.deleteBoard2(boardDTO);
 				
 			}
 			request.setAttribute("boardUpDelCnt",boardUpDelCnt);

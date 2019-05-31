@@ -88,18 +88,16 @@
 					if(upDelCnt==1){
 						alert("삭제 성공!");
 						location.replace("/z_jsp/boardListForm.do");
-						
 					}
 					else if(upDelCnt==-1){
 						alert("이미 삭제된 글입니다.");
 						location.replace("/z_jsp/boardListForm.do");
 					}
 					else if(upDelCnt==-2){
-						alert("자식글이 있어 삭제 불가능합니다..");
+						alert("비밀번호가 틀립니다..");
 					}
 					else if(upDelCnt==-3){
-						alert("비밀번호가 틀립니다..");
-						
+						alert("자식글이 있어 삭제 불가능합니다..");
 					}
 					else{
 						alert("서버쪽 DB 연동 실패");
