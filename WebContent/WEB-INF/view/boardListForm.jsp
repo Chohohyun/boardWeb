@@ -22,15 +22,22 @@
 	}
 	function goSearch(){
 		var key = $("[name=keyword]").val();
-		if (key.split(" ").join("") == "") {
+		key = $.trim(key);
+		key = key.split(" ").join("");
+		if (key == "") {
 			alert("키워드를 입력해 주십시요");
-			$("[name=key]").focus();
+			$("[name=keyword]").val("");
+			$("[name=keyword]").focus();
 			return;
 		}
-		$("[name=boardListForm] [name=keyword2]").val(key);
+		$("[name=boardListForm] [name=keyword]").val(key);
 		alert(key);
 		document.boardListForm.submit();
 		
+	}
+	function goSearchAll(){
+		$("[name=keyword]").val("");
+		document.boardListForm.submit();
 	}
 </script>
 <html>
@@ -38,10 +45,15 @@
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>게시판</title>
 </head>
-<body>
+<body onKeyDown="if(event.keyCode==13){goSearch();}">
+	<a href="javascript:location.replace('/z_jsp/loginForm.do')">로그아웃</a>
 	<center>
-		<input type="text" name="keyword" value="${keyword}">
-		<input type="button" value = "검색" onClick="goSearch();"><br>
+		<!-- 키워드 폼 -->
+		<form name = "boardListForm" method="post" action="/z_jsp/boardListForm.do">
+			<input type="text" name="keyword" value="${param.keyword}">
+			<input type="button" value = "검색" onClick="goSearch();">
+			<input type="button" value = "모두검색" onClick="goSearchAll();"><br>
+		</form>
 		<br> <a href="javascript:goBoardRegForm();">[새 글쓰기]</a>
 		<table border=1>
 			<tr>
@@ -67,12 +79,10 @@
 		<form name = "boardRegForm" method="post" action="/z_jsp/boardRegForm.do">
 		
 		</form>
+		<!--  상세보기 폼 -->
 		<form name = "boardContentForm" method="post" action="/z_jsp/boardContentForm.do">
 			<input type="hidden" name="b_no">
 		
-		</form>
-		<form name = "boardListForm" method="post" action="/z_jsp/boardListForm.do">
-			<input type="hidden" name="keyword2">
 		</form>
 		
 	</center>

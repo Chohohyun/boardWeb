@@ -41,23 +41,26 @@ public class BoardListFormAction implements CommandAction{
 			boardList.add(article);
 			*/
 			// httpserveletrequest 객체에 게시판 목록 저장하기
-			String keyword = request.getParameter("keyword2");
+			String keyword = request.getParameter("keyword");
 			System.out.println(keyword);
-			List<Map<String,String>> boardList = null;
-			if(keyword==null || keyword.equals("전체")) {
-				 boardList = boardDAO.getBoardList();
+			/* 2가지 오버로딩
+			 List<Map<String,String>> boardList = null;
+			if(keyword!=null && keyword.length()>0) {
+				 boardList = boardDAO.getBoardList(keyword);
 			}
 			else {
-				boardList = boardDAO.getBoardList(keyword);
+				boardList = boardDAO.getBoardList();
 			}
+			 */
 
+			 List<Map<String,String>> boardList = boardDAO.getBoardList2(keyword);
 			request.setAttribute("boardList", boardList);
 			if(boardList!=null) {
 				request.setAttribute("boardListCnt", boardList.size());
-				request.setAttribute("keyword", keyword);
+				//request.setAttribute("keyword", keyword);
 			}
 			
-			session.removeAttribute("keyword2");
+			
 			// httpserveletrequest 객체에 저장된 데이터는 호출되는
 			// jsp 페이지에서 꺼낼 수 있다.
 						
