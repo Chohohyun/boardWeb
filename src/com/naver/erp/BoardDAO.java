@@ -125,7 +125,7 @@ public class BoardDAO {
 			}
 		}
 	}
-	public List<Map<String,String>> getBoardList2(String keyword) throws Exception{
+	public List<Map<String,String>> getBoardList2(String keyword1,String keyword2,String orAnd) throws Exception{
 		// DB 연동에 사용되는 Connection 객체, PreparedStatement 객체, Resultset 객체의 메위주를 저장할 변수 선언
 
 		// connection 객체 (db 연결하고 상태관리)
@@ -154,20 +154,54 @@ public class BoardDAO {
 			sql.append(" print_no, ");
 			sql.append(" print_level ");
 			sql.append(" from board b ");
-			sql.append("where 1=1");
-			if( keyword!=null && keyword.length()>0 ) {
-				sql.append(" and (");
-				sql.append("  b.group_no in (select group_no from board where upper(subject) like upper( '%"+ keyword +"%') "); 
-				sql.append("                                                                      or upper(writer) like upper( '%"+ keyword +"%') ");
-				sql.append("                                                                    or upper(content) like upper( '%"+ keyword +"%') ");
-				sql.append("                                                                       or upper(email) like upper( '%"+ keyword +"%') ");  
-				sql.append("                                                                     or upper(to_char(reg_date,'YYYY-MM-DD AM HH:MI:SS')) like upper( '%"+ keyword +"%')))");  
+			sql.append(" where 1=1");
+
+			if( (keyword1!=null && keyword1.length()>0) ||  (keyword2!=null && keyword2.length()>0)) {
+				sql.append(" and ( ");
 			}
+		/*	if( keyword1!=null && keyword1.length()>0 &&  keyword2!=null && keyword2.length()>0) {
+				sql.append(" and (");	
+				sql.append("  b.group_no in (select group_no from board where (upper(subject) like upper( '%"+ keyword1 +"%') or upper(writer) like upper( '%"+ keyword1 +"%') "); 
+				sql.append("                                                                      or upper(content) like upper( '%"+ keyword1 +"%') or upper(email) like upper( '%"+ keyword1 +"%') ");
+				sql.append("                                                                    or upper(to_char(reg_date,'YYYY-MM-DD AM HH:MI:SS')) like upper( '%"+ keyword1 +"%')) "+orAnd+" (upper(subject) like upper( '%"+ keyword2 +"%') ");
+				sql.append("                                                                       or upper(writer) like upper( '%"+ keyword2 +"%') or upper(content) like upper( '%"+ keyword2 +"%') ");  
+				sql.append("                                                                     or upper(email) like upper( '%"+ keyword2 +"%') or upper(to_char(reg_date,'YYYY-MM-DD AM HH:MI:SS')) like upper( '%"+ keyword2 +"%')))) ");
+			}*/
+			if( keyword1!=null && keyword1.length()>0 ) {
+
+				sql.append("  b.group_no in (select group_no from board where (upper(subject) like upper( '%"+ keyword1 +"%') "); 
+				sql.append("                                                                      or upper(writer) like upper( '%"+ keyword1 +"%') ");
+				sql.append("                                                                    or upper(content) like upper( '%"+ keyword1 +"%') ");
+				sql.append("                                                                       or upper(email) like upper( '%"+ keyword1 +"%') ");  
+				sql.append("                                                                     or upper(to_char(reg_date,'YYYY-MM-DD AM HH:MI:SS')) like upper( '%"+ keyword1 +"%')) ");  
+
+			}
+			else if (keyword2!=null && keyword2.length()>0) {
+				sql.append("  b.group_no in (select group_no from board where");
+			}
+
+			if( keyword1!=null && keyword1.length()>0 &&  keyword2!=null && keyword2.length()>0) {
+				sql.append(orAnd);
+			}
+			
+			if(keyword2!=null && keyword2.length()>0) {
+
+				sql.append("   (upper(subject) like upper( '%"+ keyword2 +"%') "); 
+				sql.append("                                                                      or upper(writer) like upper( '%"+ keyword2 +"%') ");
+				sql.append("                                                                    or upper(content) like upper( '%"+ keyword2 +"%') ");
+				sql.append("                                                                       or upper(email) like upper( '%"+ keyword2 +"%') ");  
+				sql.append("                                                                     or upper(to_char(reg_date,'YYYY-MM-DD AM HH:MI:SS')) like upper( '%"+ keyword2 +"%'))");
+				
+			}
+			if( (keyword1!=null && keyword1.length()>0) || (keyword2!=null && keyword2.length()>0)) {
+				sql.append("))");
+			}
+			
 			sql.append(" order by group_no desc, print_no asc ");
 			System.out.println(sql);
 			pstm = conn.prepareStatement(sql.toString());
 			//keyword="\'%" + keyword +"%\'";
-			System.out.println(keyword);
+			System.out.println(keyword1);
 
 			//if(keyword!=null && keyword.length()>0 ) {
 			//	pstm.setString(1,keyword);
@@ -206,7 +240,7 @@ public class BoardDAO {
 			}
 			return boardList;
 		}catch(Exception e) {
-			System.out.println("에러발생");
+			System.out.println("BoardDAO getBoardList2 에서 에러발생");
 			return null;
 		}finally {
 			if(rs != null) {

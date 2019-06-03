@@ -24,7 +24,8 @@ public class BoardContentFormAction implements CommandAction{
 			
 			// BoardDAO 객체의 getBoard 메소드 호출로 [게시판 1개 글 검색 결과]를 얻어 BoardDTO 객체에 저장
 			BoardDTO board = boardDAO.getBoard(Integer.parseInt(b_no,10));
-			
+			String keyword1= request.getParameter("keyword1");
+			System.out.println("받았습니다 "+keyword1);
 			// /WEB-INF/view/boardContentForm.jsp 페이지에서
 			// 사용할 데이터를 HttpServletEquest 객체에 저장.
 			request.setAttribute("board", board);

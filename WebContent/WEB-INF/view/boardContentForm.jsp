@@ -61,6 +61,10 @@
 	<input type="button" value="수정/삭제" onClick="goBoardUpDelForm()">&nbsp;
 	</from>
 	<form name="boardListForm" method="post" action="/z_jsp/boardListForm.do">
+		
+	<input type="hidden" name="keyword1" value="${param.keyword1}">
+	<input type="hidden" name="keyword2" value="${param.keyword2}">
+	<input type="hidden" name="or_and" value="${param.or_and}">
 	
 	</form>
 	<form name="boardRegForm" method="post" action="/z_jsp/boardRegForm.do">
