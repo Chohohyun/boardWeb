@@ -22,9 +22,9 @@ $(document).ready(function(){
 //	}
 	
 	// 짝수 홀수 배경색 바꾸기
-	$('#board tr:odd').css('background','#999999');
-	$('#board tr:even').css('background','#C6C6C6');
-	$('#board tr').eq(0).css('background','#8A8AFF');
+	$('#board tr:odd').css('background','#EBFBFF');
+	$('#board tr:even').css('background','#F0FFF0');
+	$('#board tr').eq(0).css('background','#9DF0E1	');
 	// 마우스 갖다대면 배경색 바꾸기 
 	$('#board tr').hover(
 	function(){
@@ -110,7 +110,7 @@ $(document).ready(function(){
 			<input type="button" value = "모두검색" onClick="goSearchAll();"><br>
 		</form>
 		<br> <a href="javascript:goBoardRegForm();">[새 글쓰기]</a>
-		<table id="board" border=1>
+		<table id="board" border=0 cellpadding=5 cellspacing=0>
 			<tr>
 				<th>번호
 				<th>제목
