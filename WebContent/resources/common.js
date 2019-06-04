@@ -26,3 +26,20 @@ function is_empty(nameV){
 	}
 
 }
+function is_special_char(nameV){
+	try{
+		var val=$("[name="+nameV+"]").val();
+		val = $.trim(val);
+		if(val==""){
+			return false;
+		}
+
+		var is_special = new RegExp(/[^a-zA-Z가-힣0-9_]/).test(val);
+		return is_special;
+
+	}
+	catch(e){
+		alert("is_special_char 에서 에러");
+		return false;
+	}
+}

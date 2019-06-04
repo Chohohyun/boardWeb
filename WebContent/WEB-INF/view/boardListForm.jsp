@@ -93,6 +93,11 @@ $(document).ready(function(){
 		document.boardContentForm.submit();
 	}
 	function goSearch(){
+		if(is_special_char("keyword1") || is_special_char("keyword2")){
+			alert("키워드에는 영문,숫자,한글,_ 만 가능합니다.");
+			$(".keyword1,.keyword2").val("");
+			return;
+		}
 		
 		if(is_empty("keyword1") && is_empty("keyword2") && is_empty("date")){
 			alert("입력된 검색 조건이 모두 없어 검색을 하지 않습니다.");
