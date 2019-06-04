@@ -3,7 +3,7 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<script src="/z_jsp/resources/jquery-1.11.0.min.js"></script>
+
 <!-- jsp 기술의 한 종류인 include Directive를 이용하여 common.jsp 파일 내의 소스를 삽입하기 -->
 <%@include file="common.jsp" %>
 <script>
@@ -72,17 +72,17 @@
 
 	<center>
 		<form name="loginForm" method="post" action="/z_jsp/loginProc.do">
-			<table border=1 cellpadding=20 cellspacing=20>
+			<table class="tbcss1" border=1 cellpadding=20 cellspacing=20>
 				<tr>
 					<th><b>[로그인]</b>
 						<div style="height: 6"></div>
-						<table border=1 cellpadding=5 cellspacing=0 bordercolor="gray">
+						<table class="tbcss1" border=1 cellpadding=5 cellspacing=0 bordercolor="gray">
 							<tr>
-								<th bgcolor="gray" align=center>아이디
+								<th bgcolor="${headerColor}" align=center>아이디
 								<td><input type="text" name="admin_id" class="admin_id"
 									size="20">
 							<tr>
-								<th bgcolor="gray" align=center>암호
+								<th bgcolor="${headerColor}" align=center>암호
 								<td><input type="password" class="pwd" name="pwd" size="20">
 						</table>
 						<div style="height: 6"></div> <input type="button" value="로그인" class="login">

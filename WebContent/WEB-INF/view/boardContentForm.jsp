@@ -30,28 +30,29 @@
 <title>게시판</title>
 </head>
 <body>
-<center><br>
-<from class="boardContentForm" name="boardContentForm" method="post" action="/z_jsp/boardRegForm.do">
+<br>
+<center>
+<form class="boardContentForm" name="boardContentForm" method="post" action="/z_jsp/boardRegForm.do">
 	<b>[글 상세보기]</b>
 	<table class="tbcss1" width = "500" border="1" bordercolor="#DDDDDD" cellpadding="5" align="center">
 		<tr align="center">
-			<th bgcolor=#C6C6C6 width=60>글번호
+			<th bgcolor="${headerColor}" width=60>글번호
 			<td width=150>${board.b_no}
-			<th bgcolor=#C6C6C6 width=60>조회수
+			<th bgcolor="${headerColor}" width=60>조회수
 			<td width=150>${board.readcount}
 		<tr align="center">
-			<th bgcolor=#C6C6C6>작성자
+			<th bgcolor="${headerColor}">작성자
 			<td>${board.writer}
-			<th bgcolor=#C6C6C6>작성일
+			<th bgcolor="${headerColor}">작성일
 			<td>${board.reg_date}
 		<tr>
-			<th bgcolor=#C6C6C6>글제목
+			<th bgcolor="${headerColor}">글제목
 			<td colspan="3">${board.subject}
 		<tr>
-			<th bgcolor=#C6C6C6>글내용
+			<th bgcolor="${headerColor}">글내용
 			<td colspan="3"><pre>${board.content}</pre>
 	</table>
-	<table>
+	<table  class="tbcss1">
 		<tr height=3>
 		<td>
 	</table>
@@ -59,7 +60,7 @@
 	<input type="button" value="글목록 보기" onclick="document.boardListForm.submit();">
 	<input type="button" value="댓글달기" onClick="goBoardRegForm()">&nbsp;
 	<input type="button" value="수정/삭제" onClick="goBoardUpDelForm()">&nbsp;
-	</from>
+	</form>
 	<form name="boardListForm" method="post" action="/z_jsp/boardListForm.do">
 		
 	<input type="hidden" name="keyword1" value="${param.keyword1}">
@@ -77,5 +78,7 @@
 		<!-- 수정/삭제를 하려면 현재 글의 고유번호를 알아야하기 때문이다. -->
 		<input type="hidden" name="b_no" value="${board.b_no}">	
 	</form>
+	</center>
+	
 </body>
 </html>

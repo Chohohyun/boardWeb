@@ -6,7 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%@include file="checkLogin.jsp" %>
-<script src="/z_jsp/resources/jquery-1.11.0.min.js"></script>
+<%@include file="common.jsp" %>
 
 <script>
 	function checkBoardRegForm() {
@@ -93,31 +93,31 @@
 				<c:if test="${!empty param.b_no}">
 				<b>[댓글쓰기]</b>
 				</c:if>
-				<table border="1" bordercolor=gray cellspacing="0" cellpadding="5"
+				<table  class="tbcss1" border="1" bordercolor=gray cellspacing="0" cellpadding="5"
 					align="center">
 					<tr>
-						<th bgcolor=#C6C6C6>이 름
+						<th bgcolor="${headerColor}">이 름
 						<td><input type="text" size="10" maxlength="10" name="writer"></td>
 					</tr>
 					<tr>
-						<th bgcolor=#C6C6C6>제 목
+						<th bgcolor="${headerColor}">제 목
 						<td><input type="text" size="40" maxlength="50"
 							name="subject"></td>
 					</tr>
 					<tr>
-						<th bgcolor=#C6C6C6>이 메 일
+						<th bgcolor="${headerColor}">이 메 일
 						<td><input type="text" size="40" maxlength="30" name="email"></td>
 					</tr>
 					<tr>
-						<th bgcolor=#C6C6C6>내 용
+						<th bgcolor="${headerColor}">내 용
 						<td><textarea name="content" size="13" cols="40"> </textarea>
 					</tr>
 					<tr>
-						<th bgcolor=#C6C6C6>비 밀 번 호
+						<th bgcolor="${headerColor}">비 밀 번 호
 						<td><input type="password" size="8" maxlength="12" name="pwd"></td>
 					</tr>
 				</table>
-				<table>
+				<table  class="tbcss1">
 					<tr height=4>
 						<td>
 				</table>

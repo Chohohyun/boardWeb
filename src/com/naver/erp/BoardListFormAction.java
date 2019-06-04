@@ -44,6 +44,9 @@ public class BoardListFormAction implements CommandAction{
 			String keyword1 = request.getParameter("keyword1");
 			String keyword2 = request.getParameter("keyword2");
 			String orAnd = request.getParameter("or_and");
+			String[] checkDate = null;
+			checkDate = request.getParameterValues("date");
+			
 			System.out.println(keyword1);
 			/* 2가지 오버로딩
 			 List<Map<String,String>> boardList = null;
@@ -55,7 +58,7 @@ public class BoardListFormAction implements CommandAction{
 			}
 			 */
 
-			 List<Map<String,String>> boardList = boardDAO.getBoardList2(keyword1,keyword2,orAnd);
+			List<Map<String,String>> boardList = boardDAO.getBoardList3(keyword1,keyword2,orAnd,checkDate);
 			request.setAttribute("boardList", boardList);
 			if(boardList!=null) {
 				request.setAttribute("boardListCnt", boardList.size());
