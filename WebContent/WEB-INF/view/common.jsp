@@ -17,3 +17,5 @@
 <c:set var="oddTrColor" value="#E8F0F4"/>
 <c:set var="evenTrColor" value="#white"/>
 <c:set var="mouseOverColor" value="#D0E0F4"/>
+
+<script src="/z_jsp/resources/common.js"></script>

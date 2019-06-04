@@ -3,11 +3,11 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<%@include file="common.jsp" %>
+<%@include file="common.jsp"%>
 <!--  JSTL 커스텀 태그와 EL을 사용하여 HttpSession 객체에 로그인 아이디가 없으면 경고하고 로그인 화면으로 이동 시키기-->
 <!--  만약 세션객체에 admin_id라는 키값으로 저장된 놈이 없다면.. -->
 
-<%@include file="checkLogin.jsp" %>
+<%@include file="checkLogin.jsp"%>
 <script>
 $(document).ready(function(){
 	
@@ -65,10 +65,18 @@ $(document).ready(function(){
 	});
 
 	// 검색 조건의 흔적 남기기
+	
+	 //keyword1 라는 파라미터명의 파라미터값을 name=keyword1 가진 입력 양식에 넣어주기
 	 $("[name=boardListForm] [name=keyword1]").val("${param.keyword1}");
-	 $("[name=boardListForm] [name=keyword2]").val("${param.keyword2}");
 
+	 //keyword2 라는 파라미터명의 파라미터값을 name=keyword2 가진 입력 양식에 넣어주기
+	 $("[name=boardListForm] [name=keyword2]").val("${param.keyword2}");
+	
+	 // or_and 라는 파라미터명의 파라미터값을 name=or_and 가진 입력 양식에 넣어주기
+	 // 단 파라미터 값이 비어 있으면 문자열 or 넣어주기
 	 $("[name=boardListForm] [name=or_and]").val("${empty param.or_and? 'or' : param.or_and}");
+	
+	 // date 라는 파라미터명의 파라미터값을 name=date 가진 입력 양식에 체크해주기
 	 <c:forEach items="${paramValues.date}" var="date">
 	 	$("[name=date]").filter("[value=${date}]").prop("checked",true);
 	 </c:forEach>
@@ -85,23 +93,30 @@ $(document).ready(function(){
 		document.boardContentForm.submit();
 	}
 	function goSearch(){
-		var key1 = $("[name=boardListForm] [name=keyword1]").val();
-		var key2 = $("[name=boardListForm] [name=keyword2]").val();
-		var checkChk = $("[name=boardListForm] [name=date]").is(":checked");
-		alert(checkChk);
-		key1 = $.trim(key1);
-		key2 = $.trim(key2);
-		key1 = key1.split(" ").join("");
-		key2 = key2.split(" ").join("");
-		if (key1 == "" && key2=="" && checkChk==false) {
-			alert("키워드를 입력하거나 체크박스를 체크해주십시오");
-			$("[name=boardListForm] [name=keyword1]").val("");
-			$("[name=boardListForm] [name=keyword2]").val("");
-			$("[name=boardListForm] [name=keyword1]").focus();
+		
+		if(is_empty("keyword1") && is_empty("keyword2") && is_empty("date")){
+			alert("입력된 검색 조건이 모두 없어 검색을 하지 않습니다.");
+			$(".keyword1,.keyword2").val("");
 			return;
 		}
-		alert(key1);
 		document.boardListForm.submit();
+		//var key1 = $("[name=boardListForm] [name=keyword1]").val();
+		//var key2 = $("[name=boardListForm] [name=keyword2]").val();
+		//var checkChk = $("[name=boardListForm] [name=date]").is(":checked");
+		//alert(checkChk);
+		//key1 = $.trim(key1);
+		//key2 = $.trim(key2);
+		//key1 = key1.split(" ").join("");
+		//key2 = key2.split(" ").join("");
+		//if (key1 == "" && key2=="" && checkChk==false) {
+			//alert("키워드를 입력하거나 체크박스를 체크해주십시오");
+			//$("[name=boardListForm] [name=keyword1]").val("");
+			//$("[name=boardListForm] [name=keyword2]").val("");
+			//$("[name=boardListForm] [name=keyword1]").focus();
+			//return;
+		//}
+		//alert(key1);
+		//document.boardListForm.submit();
 		
 	}
 	function goSearchAll(){
@@ -113,9 +128,12 @@ $(document).ready(function(){
 </script>
 <html>
 <style>
-		.style1{background-color:#CFCFE7; color:#000000;} 
-		/*적용했다가 풀기 가능*/
-	</style>
+.style1 {
+	background-color: #CFCFE7;
+	color: #000000;
+}
+/*적용했다가 풀기 가능*/
+</style>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>게시판</title>
@@ -124,17 +142,16 @@ $(document).ready(function(){
 	<a href="javascript:location.replace('/z_jsp/loginForm.do')">로그아웃</a>
 	<center>
 		<!-- 키워드 폼 -->
-		<form name = "boardListForm" method="post" action="/z_jsp/boardListForm.do">
-			<input type="text" name="keyword1" >
-			<select name="or_and" >	
+		<form name="boardListForm" method="post"
+			action="/z_jsp/boardListForm.do">
+			<input type="text" name="keyword1"> <select name="or_and">
 				<option value="or">or</option>
 				<option value="and">and</option>
-			</select>	
-			<input type="text" name="keyword2" >
-			<input type="checkbox" name="date" id="date1" value="오늘">오늘
-			<input type="checkbox" name="date" id="date2" value="어제">어제
-			<input type="button" value = "검색" onClick="goSearch();">
-			<input type="button" value = "모두검색" onClick="goSearchAll();"><br>
+			</select> <input type="text" name="keyword2"> <input type="checkbox"
+				name="date" id="date1" value="오늘">오늘 <input type="checkbox"
+				name="date" id="date2" value="어제">어제 <input type="button"
+				value="검색" onClick="goSearch();"> <input type="button"
+				value="모두검색" onClick="goSearchAll();"><br>
 		</form>
 		<br> <a href="javascript:goBoardRegForm();">[새 글쓰기]</a>
 		<table class="tbcss2" id="board" border=0 cellpadding=5 cellspacing=0>
@@ -145,7 +162,8 @@ $(document).ready(function(){
 				<th>등록일
 				<th>조회수 <c:forEach items="${boardList}" var="board"
 						varStatus="loopTagStatus">
-						<tr style="cursor:pointer" onClick="goBoardContentForm(${board.b_no});">
+						<tr style="cursor: pointer"
+							onClick="goBoardContentForm(${board.b_no});">
 							<td>${requestScope.boardListCnt-loopTagStatus.index}
 							<td><c:if test="${board.print_level>0}">
 									<c:forEach begin="0" end="${board.print_level}">
@@ -158,18 +176,18 @@ $(document).ready(function(){
 							<td>${board.readcount}
 					</c:forEach>
 		</table>
-		<form name = "boardRegForm" method="post" action="/z_jsp/boardRegForm.do">
-		
-		</form>
+		<form name="boardRegForm" method="post"
+			action="/z_jsp/boardRegForm.do"></form>
 		<!--  상세보기 폼 -->
-		<form name = "boardContentForm" method="post" action="/z_jsp/boardContentForm.do">
+		<form name="boardContentForm" method="post"
+			action="/z_jsp/boardContentForm.do">
 			<input type="hidden" name="keyword1" value="${param.keyword1}">
 			<input type="hidden" name="keyword2" value="${param.keyword2}">
-			<input type="hidden" name="or_and" value="${param.or_and}">
-			<input type="hidden" name="b_no">
-		
+			<input type="hidden" name="or_and" value="${param.or_and}"> <input
+				type="hidden" name="b_no">
+
 		</form>
-		
+
 	</center>
 </body>
 </html>
