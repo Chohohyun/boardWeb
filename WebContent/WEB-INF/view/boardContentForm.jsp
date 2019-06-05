@@ -52,7 +52,7 @@
 			<th bgcolor="${headerColor}">글내용
 			<td colspan="3"><pre>${board.content}</pre>
 	</table>
-	<table  class="tbcss1">
+	<table>
 		<tr height=3>
 		<td>
 	</table>

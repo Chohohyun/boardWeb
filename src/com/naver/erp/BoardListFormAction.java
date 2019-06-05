@@ -57,13 +57,13 @@ public class BoardListFormAction implements CommandAction{
 				boardList = boardDAO.getBoardList();
 			}
 			 */
-
+			int boardListAllCnt = boardDAO.getBoardListAllCnt(keyword1, keyword2, orAnd, checkDate);
 			List<Map<String,String>> boardList = boardDAO.getBoardList3(keyword1,keyword2,orAnd,checkDate);
 			request.setAttribute("boardList", boardList);
-			if(boardList!=null) {
-				request.setAttribute("boardListCnt", boardList.size());
+			
+			request.setAttribute("boardListAllCnt", boardListAllCnt);
 				//request.setAttribute("keyword", keyword);
-			}
+			
 			
 			
 			// httpserveletrequest 객체에 저장된 데이터는 호출되는

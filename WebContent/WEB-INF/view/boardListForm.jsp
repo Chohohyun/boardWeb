@@ -67,19 +67,31 @@ $(document).ready(function(){
 	// 검색 조건의 흔적 남기기
 	
 	 //keyword1 라는 파라미터명의 파라미터값을 name=keyword1 가진 입력 양식에 넣어주기
-	 $("[name=boardListForm] [name=keyword1]").val("${param.keyword1}");
+	// $("[name=boardListForm] [name=keyword1]").val("${param.keyword1}");
 
 	 //keyword2 라는 파라미터명의 파라미터값을 name=keyword2 가진 입력 양식에 넣어주기
-	 $("[name=boardListForm] [name=keyword2]").val("${param.keyword2}");
+	// $("[name=boardListForm] [name=keyword2]").val("${param.keyword2}");
 	
 	 // or_and 라는 파라미터명의 파라미터값을 name=or_and 가진 입력 양식에 넣어주기
 	 // 단 파라미터 값이 비어 있으면 문자열 or 넣어주기
-	 $("[name=boardListForm] [name=or_and]").val("${empty param.or_and? 'or' : param.or_and}");
+	// $("[name=boardListForm] [name=or_and]").val("${empty param.or_and? 'or' : param.or_and}");
 	
 	 // date 라는 파라미터명의 파라미터값을 name=date 가진 입력 양식에 체크해주기
-	 <c:forEach items="${paramValues.date}" var="date">
-	 	$("[name=date]").filter("[value=${date}]").prop("checked",true);
-	 </c:forEach>
+	// <c:forEach items="${paramValues.date}" var="date">
+	// 	$("[name=date]").filter("[value=${date}]").prop("checked",true);
+	// </c:forEach>
+	 
+	// 검색 조건 흔적 남기기 2
+	inputData("keyword1","${param.keyword1}");
+	inputData("keyword2","${param.keyword2}");
+	inputData("or_and","${param.or_and}");
+	<c:forEach items="${paramValues.date}" var="date">
+	inputData("date","${date}");
+	</c:forEach>
+	 
+	
+	
+	
 });
 
 	function goBoardRegForm(){
@@ -124,10 +136,20 @@ $(document).ready(function(){
 		//document.boardListForm.submit();
 		
 	}
+	// 모두검색 키워드 없애기
 	function goSearchAll(){
-		$("[name=boardListForm] [name=keyword1]").val("");
-		$("[name=boardListForm] [name=keyword2]").val("");
-		$("[name=boardListForm] [name=date]").prop("checked",false);
+		// 기존 방식
+		//$("[name=boardListForm] [name=keyword1]").val("");
+		//$("[name=boardListForm] [name=keyword2]").val("");
+		//$("[name=boardListForm] [name=date]").prop("checked",false);
+		
+		// 공용함수 setEmpty 활용
+		//setEmpty("keyword1");
+		//setEmpty("keyword2");
+		//setEmpty("date");
+		
+		// 공용함수 setEmpty2 활용
+		setEmpty2( "[name=keyword1], [name=keyword2], [name=date]");
 		document.boardListForm.submit();
 	}
 </script>
@@ -159,6 +181,7 @@ $(document).ready(function(){
 				value="모두검색" onClick="goSearchAll();"><br>
 		</form>
 		<br> <a href="javascript:goBoardRegForm();">[새 글쓰기]</a>
+		[총 개수] : ${requestScope.boardListAllCnt}<br>
 		<table class="tbcss2" id="board" border=0 cellpadding=5 cellspacing=0>
 			<tr>
 				<th>번호
@@ -169,7 +192,7 @@ $(document).ready(function(){
 						varStatus="loopTagStatus">
 						<tr style="cursor: pointer"
 							onClick="goBoardContentForm(${board.b_no});">
-							<td>${requestScope.boardListCnt-loopTagStatus.index}
+							<td>${requestScope.boardListAllCnt-loopTagStatus.index}
 							<td><c:if test="${board.print_level>0}">
 									<c:forEach begin="0" end="${board.print_level}">
 							&nbsp;&nbsp;&nbsp;

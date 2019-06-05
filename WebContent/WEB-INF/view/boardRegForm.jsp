@@ -10,6 +10,74 @@
 
 <script>
 	function checkBoardRegForm() {
+		alert("1");
+		if (is_empty("writer")) {
+			alert("이름을 입력해 주십시요");
+			$("[name=writer]").focus();
+			return;
+		}
+		if (is_empty("subject")) {
+			alert("제목을 입력해 주십시요");
+			$("[name=subject]").focus();
+			return;
+		}
+		if (is_empty("email")) {
+			alert("이메일을 입력해 주십시요");
+			$("[name=email]").focus();
+			return;
+		}
+		if (is_empty("content")) {
+			alert("내용을 입력해 주십시요");
+			$("[name=content]").focus();
+			return;
+		}if (is_empty("pwd")) {
+			alert("암호를 입력해 주십시요");
+			$("[name=pwd]").focus();
+			return;
+		}
+		if(!is_pattern("writer", /^[a-zA-Z]{3,10}$/) && !is_pattern("writer", /^[가-힣]{3,10}$/)){
+			alert("영어 또는 한글만 가능");
+			$("[name=writer]").val("");
+			return;
+		}
+		var content=$("[name=content]").val();
+		if(content.length>1000){
+			alert("게시판 내용글은 1000자가 넘어서면 안됩니다.");
+			return;
+		}
+		
+		if (confirm("정말 저장하시겠습니까?") == false) {
+			return;
+		}
+		alert($("[name=boardRegForm]").serialize());
+		// 현재화면에서 페이지 이동 없이 서버쪽 "/z_jsp/boardRegProc.do"을 호출하여
+		// 게시판 입력 행 적용 개수가 있는html 소스를 문자열로 받기
+		$.ajax({
+			url : "/z_jsp/boardRegProc.do",
+			type : "post",
+			// 일일이 써야함
+			//data:{'admin_id':admin_id, 'pwd':pwd}
+			// 여러개도 가능	
+			data : $("[name=boardRegForm]").serialize(),
+			datatype : "html",
+			success : function(html) {
+				var boardRegCnt = $(html).text();
+				boardRegCnt = boardRegCnt.split(" ").join("");
+				alert(boardRegCnt);
+				if (boardRegCnt == 1) {
+					alert("게시판 새글 등록 성공!");
+					location.replace("/z_jsp/boardListForm.do");
+				} else {
+					alert("게시판 새글 등록 실패! 관리자에게 문의 바람!");
+				}
+			},
+			error : function(html) {
+				alert("서버와 비동기 방식 통신 실패!");
+			}
+
+		});
+	}
+	function checkBoardRegForm2() {
 		var writer = $("[name=writer]").val();
 		if (writer.split(" ").join("") == "") {
 			alert("이름을 입력해 주십시요");
@@ -117,7 +185,7 @@
 						<td><input type="password" size="8" maxlength="12" name="pwd"></td>
 					</tr>
 				</table>
-				<table  class="tbcss1">
+				<table>
 					<tr height=4>
 						<td>
 				</table>

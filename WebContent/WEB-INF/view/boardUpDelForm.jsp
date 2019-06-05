@@ -11,9 +11,8 @@
 <script>
 	function checkBoardUpDelForm(upDel) {
 		if(upDel=="del"){
-			var pwd = $("[name=pwd]").val();
-			if(pwd.split(" ").join("")==""){
-				alert("암호를 입력해 주십시오.");
+			if (is_empty("pwd")) {
+				alert("암호를 입력해 주십시요");
 				$("[name=pwd]").focus();
 				return;
 			}
@@ -23,38 +22,39 @@
 			}
 		}		
 		else if (upDel=="up"){
-			var writer = $("[name=writer]").val();
-			if (writer.split(" ").join("") == "") {
+			alert("1");
+			if (is_empty("writer")) {
 				alert("이름을 입력해 주십시요");
 				$("[name=writer]").focus();
 				return;
 			}
-
-			var subject = $("[name=subject]").val();
-			if (subject.split(" ").join("") == "") {
+			if (is_empty("subject")) {
 				alert("제목을 입력해 주십시요");
 				$("[name=subject]").focus();
 				return;
 			}
-
-			var email = $("[name=email]").val();
-			if (email.split(" ").join("") == "") {
+			if (is_empty("email")) {
 				alert("이메일을 입력해 주십시요");
 				$("[name=email]").focus();
 				return;
 			}
-
-			var content = $("[name=content]").val();
-			if (content.split(" ").join("") == "") {
+			if (is_empty("content")) {
 				alert("내용을 입력해 주십시요");
 				$("[name=content]").focus();
 				return;
-			}
-
-			var pwd = $("[name=pwd]").val();
-			if (pwd.split(" ").join("") == "") {
-				alert("비밀번호를 입력해 주십시요");
+			}if (is_empty("pwd")) {
+				alert("암호를 입력해 주십시요");
 				$("[name=pwd]").focus();
+				return;
+			}
+			if(!is_pattern("writer", /^[a-zA-Z]{3,10}$/) && !is_pattern("writer", /^[가-힣]{3,10}$/)){
+				alert("영어 또는 한글만 가능");
+				$("[name=writer]").val("");
+				return;
+			}
+			var content=$("[name=content]").val();
+			if(content.length>1000){
+				alert("게시판 내용글은 1000자가 넘어서면 안됩니다.");
 				return;
 			}
 			if(confirm("정말 수정 하시겠습니까?")==false){
@@ -149,7 +149,7 @@
 						<td><input type="password" size="8" maxlength="12" name="pwd"></td>
 					</tr>
 				</table>
-				<table  class="tbcss1">
+				<table>
 					<tr height=4>
 						<td>
 				</table>
