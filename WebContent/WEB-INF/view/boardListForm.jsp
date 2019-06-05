@@ -204,6 +204,7 @@ $(document).ready(function(){
 							<td>${board.readcount}
 					</c:forEach>
 		</table>
+		${requestScope.boardListAllCnt==0?'검색된 글이 없습니다.' : ''} 
 		<form name="boardRegForm" method="post"
 			action="/z_jsp/boardRegForm.do"></form>
 		<!--  상세보기 폼 -->
