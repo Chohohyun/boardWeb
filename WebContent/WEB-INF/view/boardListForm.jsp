@@ -180,9 +180,13 @@ $(document).ready(function(){
 				value="검색" onClick="goSearch();"> <input type="button"
 				value="모두검색" onClick="goSearchAll();"><br>
 		</form>
-		<br> <a href="javascript:goBoardRegForm();">[새 글쓰기]</a>
-		[총 개수] : ${requestScope.boardListAllCnt}<br>
-		<table class="tbcss2" id="board" border=0 cellpadding=5 cellspacing=0>
+		<table border = 0>
+			<tr>
+				<td align=right>
+						[총 개수] : ${requestScope.boardListAllCnt} &nbsp;&nbsp;&nbsp;
+						<a href="javascript:goBoardRegForm();">[새 글쓰기]</a>
+			<tr>
+			<td><table class="tbcss2" id="board" border=0 cellpadding=5 cellspacing=0>
 			<tr>
 				<th>번호
 				<th>제목
@@ -204,6 +208,8 @@ $(document).ready(function(){
 							<td>${board.readcount}
 					</c:forEach>
 		</table>
+		</table>
+		
 		${requestScope.boardListAllCnt==0?'검색된 글이 없습니다.' : ''} 
 		<form name="boardRegForm" method="post"
 			action="/z_jsp/boardRegForm.do"></form>
