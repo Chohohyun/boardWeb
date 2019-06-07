@@ -11,6 +11,12 @@
 <script>
 $(document).ready(function(){
 	
+	// name=boardRegForm을 가진 form 태그와
+	// name=boardContentForm을 가진 form 태그를 안보이게 하기
+	$("[name=boardRegForm], [name=boardContentForm]").hide();
+	
+	
+	
 	//alert('${param.date}');
 	//var values = '${param.date}'.split();
 	//for(var i=0; i<values.length; i++){
@@ -35,35 +41,45 @@ $(document).ready(function(){
 	var evenTrColor = "${evenTrColor}";
 	var oddTrColor ="${oddTrColor}";
 	var headerColor="${headerColor}";
-	// 짝수 홀수 배경색 바꾸기
-	$('#board tr:odd').css('background',oddTrColor);
-	$('#board tr:even').css('background',evenTrColor);
-	$('#board tr').eq(0).css('background',headerColor);
+	var mouseOverColor="${mouseOverColor}";
+	
+	setTableTrBgColor("boardList",headerColor,evenTrColor,oddTrColor,mouseOverColor);
+	
+	
+	
+	
+	/*짝수 홀수 배경색 바꾸기
+	//$('#board tr:odd').css('background',oddTrColor);
+	//$('#board tr:even').css('background',evenTrColor);
+	//$('#board tr').eq(0).css('background',headerColor);
 	// 마우스 갖다대면 배경색 바꾸기 
-	$('#board tr').hover(
-	function(){
+	//$('#board tr').hover(
+	//function(){
 		// 마우스를 갖다댄 tr 태그 후손의 td태그에 class="style1" 삽입
-		$(this).find('td').addClass('style1');
-	},
-	function(){
-		$(this).find('td').removeClass('style1');
-	});
+		//$(this).find('td').addClass('style1');
+//	},
+	//function(){
+	//	$(this).find('td').removeClass('style1');
+//	});
 
-	$('#board tr th').hover(
-	function(){
+//	$('#board tr th').hover(
+//	function(){
 		//순서번호를 저장해준다.
-		var no = $(this).index()+1;
+	//	var no = $(this).index()+1;
 
 		// td 중에 no번째 자식들만.
-		$('#board tr td:nth-child('+no+')').addClass('style1');
+	//	$('#board tr td:nth-child('+no+')').addClass('style1');
 
-	},
+	//},
 	
-	function(){
+	//function(){
 	
-		$('#board tr td').removeClass('style1');
-	});
-
+	//	$('#board tr td').removeClass('style1');
+	//});
+	*/
+	
+	
+	
 	// 검색 조건의 흔적 남기기
 	
 	 //keyword1 라는 파라미터명의 파라미터값을 name=keyword1 가진 입력 양식에 넣어주기
@@ -97,7 +113,31 @@ $(document).ready(function(){
 	function goBoardRegForm(){
 		// name = boardRegForm을 가진 form 태그안의 action에 설정된 URL 로 이동하기
 		// 이동 시 form 태그안의 모든 입력 양식이 파라미터값으로 전송된다.
+		var formObj = $("[name=boardListForm]");
+		var keyword1 = formObj.find("[name=keyword1]").val();
+		var keyword2 = formObj.find("[name=keyword2]").val();
+		var or_and = formObj.find("[name=or_and]").val();
+		var date=[];
+		formObj.find("[name=date]").each(function(){
+			if($(this).is(":checked")){
+				date.push( $(this).val() );
+			}
+		});
+		
+		
+		// name=boardListForm 을 가진 form 태그안의 입력 양식의 value 값을
+		// name=boardRegForm 을 가진 form 태그안의 입력 양식의 value 값에 넣어주기 / 체크해주기
+		var formObj2 = $("[name=boardRegForm]");
+		var keyword1 = formObj2.find("[name=keyword1]").val(keyword1);
+		var keyword2 = formObj2.find("[name=keyword2]").val(keyword2);
+		var or_and = formObj2.find("[name=or_and]").val(or_and);
+		for(var i=0; i<date.length; i++){
+			
+			formObj2.find("[name=date]").filter("[value="+date[i]+"]").prop("checked",true);
+		}
+		alert(formObj2.serialize());
 		document.boardRegForm.submit();
+		
 	}
 	function goBoardContentForm(b_no){
 		$("[name=boardContentForm] [name=b_no]").val(b_no);
@@ -180,13 +220,13 @@ $(document).ready(function(){
 				value="검색" onClick="goSearch();"> <input type="button"
 				value="모두검색" onClick="goSearchAll();"><br>
 		</form>
-		<table border = 0>
+		<table  border = 0>
 			<tr>
 				<td align=right>
 						[총 개수] : ${requestScope.boardListAllCnt} &nbsp;&nbsp;&nbsp;
 						<a href="javascript:goBoardRegForm();">[새 글쓰기]</a>
 			<tr>
-			<td><table class="tbcss2" id="board" border=0 cellpadding=5 cellspacing=0>
+			<td><table class="tbcss2 boardList" id="board" border=0 cellpadding=5 cellspacing=0>
 			<tr>
 				<th>번호
 				<th>제목
@@ -211,15 +251,24 @@ $(document).ready(function(){
 		</table>
 		
 		${requestScope.boardListAllCnt==0?'검색된 글이 없습니다.' : ''} 
-		<form name="boardRegForm" method="post"
-			action="/z_jsp/boardRegForm.do"></form>
+		<form name="boardRegForm" method="post" action="/z_jsp/boardRegForm.do">
+		
+			<input type="hidden" name="keyword1" class = "keyword1">
+			<input type="hidden" name="keyword2" class = "keyword2">
+			<input type="hidden" name="or_and" class = "or_and">
+			<input type="checkbox" name="date" value="오늘">오늘 
+			<input type="checkbox" name="date" value="어제">어제 
+			</form> 
 		<!--  상세보기 폼 -->
 		<form name="boardContentForm" method="post"
 			action="/z_jsp/boardContentForm.do">
-			<input type="hidden" name="keyword1" value="${param.keyword1}">
-			<input type="hidden" name="keyword2" value="${param.keyword2}">
-			<input type="hidden" name="or_and" value="${param.or_and}"> <input
-				type="hidden" name="b_no">
+			 
+			<input type="hidden" name="b_no">
+			<input type="hidden" name="keyword1" class = "keyword1">
+			<input type="hidden" name="keyword2" class = "keyword2">
+			<input type="hidden" name="or_and" class = "or_and">
+			<input type="checkbox" name="date" value="오늘">오늘 
+			<input type="checkbox" name="date" value="어제">어제 
 
 		</form>
 

@@ -57,16 +57,16 @@ function inputData(nameV,data){
 		if((data+"").split(" ").join("")==""){
 			return;
 		}
-		
+
 		//name 값을 가진 입력 양식을 관리하는 JQuery 객체 생성하기
 		var obj = $("[name="+nameV+"]");
-		
+
 		// 만약 입력 양식이 checkbox 또는 radio면
 		// nameV 변수 안의 데이터를 가진 checkbox 또는 radio 를 체크하기
 		if(obj.is(":checkbox") || obj.is(":radio")){
 			obj.filter("[value="+data+"]").prop("checked",true);
 		}
-		
+
 		// 만약 아니면 naveV 변수 안의 데이터를 삽입하기
 		else{
 			obj.val(data);
@@ -77,12 +77,12 @@ function inputData(nameV,data){
 	}
 }
 
-// 입력 양식에 value 값을 삭제하거나 체크 값을 풀어주는 함수 선언하기
+//입력 양식에 value 값을 삭제하거나 체크 값을 풀어주는 함수 선언하기
 function setEmpty(nameV){
 	try {
 		// name 값이라는 가진 양식을 관리하는 JQuery 객체 생성하기
 		var obj = $("[name="+nameV+"]");
-		
+
 		if(obj.length==0){
 			alert("name="+nameV+"을 가진 입력양식이 없습니다.");
 			return;
@@ -134,5 +134,32 @@ function is_pattern(nameV, patternObj){
 	} catch (e) {
 		alert("is_pattern('"+nameV+"' ~) 함수에서 에러 발생!");
 		// TODO: handle exception
+	}
+}
+
+function setTableTrBgColor(tableClassV,headerColor,oddBgColor,evenBgColor,mouseOnBgColor){
+	try{
+		alert("11111");
+		var firstTrObj= $("."+tableClassV+" tr:eq(0)");
+		var trObjs=firstTrObj.siblings("tr");
+		firstTrObj.css('background',headerColor);
+		alert("2222");
+		trObjs.filter(":odd").css('background',evenBgColor);
+		trObjs.filter(":even").css('background',oddBgColor);
+
+		trObjs.hover(
+				function(){
+					$(this).css('background',mouseOnBgColor);
+				},
+				function(){
+					if($(this).index()%2==0){
+						$(this).css('background',evenBgColor);
+					}else{
+
+						$(this).css('background',oddBgColor);
+					}
+				});
+	}catch(e){
+		alert("setTableTrBgColor('"+tableClassV+"',~) 함수 호출시 에러발생");
 	}
 }

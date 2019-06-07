@@ -24,12 +24,17 @@ public class BoardDAO {
 
 		return DriverManager.getConnection(url,id,pw);
 	}
-	public int getBoardListAllCnt(String keyword1, String keyword2, String orAnd, String[] checkDate) throws Exception{
+	public int getBoardListAllCnt(BoardSearchDTO boardSearchDTO) throws Exception{
 		Connection conn = null;
 		PreparedStatement pstm = null;
 		ResultSet rs =null;
 
 		StringBuffer sql = new StringBuffer();
+		
+		String keyword1 = boardSearchDTO.getKeyword1();
+		String keyword2 = boardSearchDTO.getKeyword2();
+		String orAnd = boardSearchDTO.getOr_and();
+		String[] checkDate = boardSearchDTO.getDate();
 		try {
 			conn = getConnection();
 
@@ -382,7 +387,7 @@ public class BoardDAO {
 			}
 		}
 	}
-	public List<Map<String,String>> getBoardList3(String keyword1,String keyword2,String orAnd,String[] checkDate) throws Exception{
+	public List<Map<String,String>> getBoardList3(BoardSearchDTO boardSearchDTO) throws Exception{
 		// DB 연동에 사용되는 Connection 객체, PreparedStatement 객체, Resultset 객체의 메위주를 저장할 변수 선언
 
 		// connection 객체 (db 연결하고 상태관리)
@@ -395,6 +400,11 @@ public class BoardDAO {
 
 		// select SQL 구문 문자열을 저장할 StringBuffer 객체 생성하기
 		StringBuffer sql = new StringBuffer();
+
+		String keyword1 = boardSearchDTO.getKeyword1();
+		String keyword2 = boardSearchDTO.getKeyword2();
+		String orAnd = boardSearchDTO.getOr_and();
+		String[] checkDate = boardSearchDTO.getDate();
 		try {
 			conn = getConnection();
 

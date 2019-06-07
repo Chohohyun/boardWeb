@@ -47,6 +47,13 @@ public class BoardListFormAction implements CommandAction{
 			String[] checkDate = null;
 			checkDate = request.getParameterValues("date");
 			
+			//BoardSearchDTO에 파라미터값들을 저장하기
+			BoardSearchDTO boardSearchDTO = new BoardSearchDTO();
+			boardSearchDTO.setKeyword1(keyword1);
+			boardSearchDTO.setKeyword2(keyword2);
+			boardSearchDTO.setOr_and(orAnd);
+			boardSearchDTO.setDate(checkDate);
+			
 			System.out.println(keyword1);
 			/* 2가지 오버로딩
 			 List<Map<String,String>> boardList = null;
@@ -57,8 +64,8 @@ public class BoardListFormAction implements CommandAction{
 				boardList = boardDAO.getBoardList();
 			}
 			 */
-			int boardListAllCnt = boardDAO.getBoardListAllCnt(keyword1, keyword2, orAnd, checkDate);
-			List<Map<String,String>> boardList = boardDAO.getBoardList3(keyword1,keyword2,orAnd,checkDate);
+			int boardListAllCnt = boardDAO.getBoardListAllCnt(boardSearchDTO);
+			List<Map<String,String>> boardList = boardDAO.getBoardList3(boardSearchDTO);
 			request.setAttribute("boardList", boardList);
 			
 			request.setAttribute("boardListAllCnt", boardListAllCnt);
