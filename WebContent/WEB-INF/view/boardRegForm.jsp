@@ -9,15 +9,6 @@
 <%@include file="common.jsp" %>
 
 <script>
-	$(document).ready(function(){
-		//$("[name=boardListForm]").hide();
-		inputData("keyword1","${param.keyword1}");
-		inputData("keyword2","${param.keyword2}");
-		inputData("or_and","${param.or_and}");
-		<c:forEach items="${paramValues.date}" var="date">
-			inputData("date","${date}");
-		</c:forEach>
-	});
 	function checkBoardRegForm() {
 		alert("1");
 		if (is_empty("writer")) {
@@ -187,7 +178,7 @@
 					</tr>
 					<tr>
 						<th bgcolor="${headerColor}">내 용
-						<td><textarea name="content" size="13" cols="40"> </textarea>
+						<td><textarea name="content" rows="13" cols="40"> </textarea>
 					</tr>
 					<tr>
 						<th bgcolor="${headerColor}">비 밀 번 호
@@ -207,11 +198,6 @@
 			</form>
 
 			<form name="boardListForm" method="post" action="/z_jsp/boardListForm.do">
-				<input type="hidden" name="keyword1" class="keyword1" >
-				<input type="hidden" name="keyword2" class="keyword2" >
-				<input type="hidden" name="or_and" class="or_and" >
-				<input type="checkbox" name="date" value="오늘" >오늘
-				<input type="checkbox" name="date" value="어제" >어제
 			</form>
 		</center>
 	</center>

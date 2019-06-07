@@ -16,6 +16,9 @@ public class BoardRegFormAction implements CommandAction{
 	public String requestPro(HttpServletRequest request, HttpServletResponse response) 
 			throws Throwable{
 		try {
+
+			HttpSession session = request.getSession();
+			session.setAttribute("uri", "boardRegForm");
 			// 파라미터값 꺼내어 변수에 저장
 			String b_no = request.getParameter("b_no");
 			

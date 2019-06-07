@@ -139,11 +139,10 @@ function is_pattern(nameV, patternObj){
 
 function setTableTrBgColor(tableClassV,headerColor,oddBgColor,evenBgColor,mouseOnBgColor){
 	try{
-		alert("11111");
 		var firstTrObj= $("."+tableClassV+" tr:eq(0)");
 		var trObjs=firstTrObj.siblings("tr");
-		firstTrObj.css('background',headerColor);
-		alert("2222");
+		firstTrObj.css('background',headerColor)
+	
 		trObjs.filter(":odd").css('background',evenBgColor);
 		trObjs.filter(":even").css('background',oddBgColor);
 

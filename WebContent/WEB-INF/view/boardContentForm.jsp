@@ -62,11 +62,11 @@
 	<input type="button" value="수정/삭제" onClick="goBoardUpDelForm()">&nbsp;
 	</form>
 	<form name="boardListForm" method="post" action="/z_jsp/boardListForm.do">
-		
+	<!-- 	
 	<input type="hidden" name="keyword1" value="${param.keyword1}">
 	<input type="hidden" name="keyword2" value="${param.keyword2}">
 	<input type="hidden" name="or_and" value="${param.or_and}">
-	
+	 -->
 	</form>
 	<form name="boardRegForm" method="post" action="/z_jsp/boardRegForm.do">
 		<!-- 게시판 상세보기 화면을 구성하는 글의 고유번호를 hidden 태그에 저장한다 -->

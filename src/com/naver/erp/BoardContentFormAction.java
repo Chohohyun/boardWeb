@@ -16,12 +16,14 @@ public class BoardContentFormAction implements CommandAction{
 	public String requestPro(HttpServletRequest request, HttpServletResponse response) 
 			throws Throwable{
 		try {
+			HttpSession session = request.getSession();
+			session.setAttribute("uri", "boardContentForm");
 			// 클라이언트가 보낸 파라미터값 꺼내어 변수에 저장
 			String b_no = request.getParameter("b_no");
-			
+
 			// DB 연동을 위해  BoardDAO 객체 생성
 			BoardDAO boardDAO = BoardDAO.getInstance();
-			
+
 			// BoardDAO 객체의 getBoard 메소드 호출로 [게시판 1개 글 검색 결과]를 얻어 BoardDTO 객체에 저장
 			BoardDTO board = boardDAO.getBoard(Integer.parseInt(b_no,10));
 			String keyword1= request.getParameter("keyword1");

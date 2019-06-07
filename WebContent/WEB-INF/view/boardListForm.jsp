@@ -98,10 +98,10 @@ $(document).ready(function(){
 	// </c:forEach>
 	 
 	// 검색 조건 흔적 남기기 2
-	inputData("keyword1","${param.keyword1}");
-	inputData("keyword2","${param.keyword2}");
-	inputData("or_and","${param.or_and}");
-	<c:forEach items="${paramValues.date}" var="date">
+	inputData("keyword1","${sessionScope.keyword1}");
+	inputData("keyword2","${sessionScope.keyword2}");
+	inputData("or_and","${sessionScope.or_and}");
+	<c:forEach items="${sessionScope.date}" var="date">
 	inputData("date","${date}");
 	</c:forEach>
 	 
@@ -253,22 +253,12 @@ $(document).ready(function(){
 		${requestScope.boardListAllCnt==0?'검색된 글이 없습니다.' : ''} 
 		<form name="boardRegForm" method="post" action="/z_jsp/boardRegForm.do">
 		
-			<input type="hidden" name="keyword1" class = "keyword1">
-			<input type="hidden" name="keyword2" class = "keyword2">
-			<input type="hidden" name="or_and" class = "or_and">
-			<input type="checkbox" name="date" value="오늘">오늘 
-			<input type="checkbox" name="date" value="어제">어제 
 			</form> 
 		<!--  상세보기 폼 -->
 		<form name="boardContentForm" method="post"
 			action="/z_jsp/boardContentForm.do">
 			 
 			<input type="hidden" name="b_no">
-			<input type="hidden" name="keyword1" class = "keyword1">
-			<input type="hidden" name="keyword2" class = "keyword2">
-			<input type="hidden" name="or_and" class = "or_and">
-			<input type="checkbox" name="date" value="오늘">오늘 
-			<input type="checkbox" name="date" value="어제">어제 
 
 		</form>
 
