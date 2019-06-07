@@ -111,31 +111,7 @@ $(document).ready(function(){
 });
 
 	function goBoardRegForm(){
-		// name = boardRegForm을 가진 form 태그안의 action에 설정된 URL 로 이동하기
-		// 이동 시 form 태그안의 모든 입력 양식이 파라미터값으로 전송된다.
-		var formObj = $("[name=boardListForm]");
-		var keyword1 = formObj.find("[name=keyword1]").val();
-		var keyword2 = formObj.find("[name=keyword2]").val();
-		var or_and = formObj.find("[name=or_and]").val();
-		var date=[];
-		formObj.find("[name=date]").each(function(){
-			if($(this).is(":checked")){
-				date.push( $(this).val() );
-			}
-		});
-		
-		
-		// name=boardListForm 을 가진 form 태그안의 입력 양식의 value 값을
-		// name=boardRegForm 을 가진 form 태그안의 입력 양식의 value 값에 넣어주기 / 체크해주기
-		var formObj2 = $("[name=boardRegForm]");
-		var keyword1 = formObj2.find("[name=keyword1]").val(keyword1);
-		var keyword2 = formObj2.find("[name=keyword2]").val(keyword2);
-		var or_and = formObj2.find("[name=or_and]").val(or_and);
-		for(var i=0; i<date.length; i++){
-			
-			formObj2.find("[name=date]").filter("[value="+date[i]+"]").prop("checked",true);
-		}
-		alert(formObj2.serialize());
+	
 		document.boardRegForm.submit();
 		
 	}

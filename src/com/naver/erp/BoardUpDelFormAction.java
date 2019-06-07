@@ -16,6 +16,9 @@ public class BoardUpDelFormAction implements CommandAction{
 	public String requestPro(HttpServletRequest request, HttpServletResponse response) 
 			throws Throwable{
 		try {
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("uri","boardUpDelForm");
 			String b_no = request.getParameter("b_no");
 			
 			BoardDAO boardDAO = BoardDAO.getInstance();

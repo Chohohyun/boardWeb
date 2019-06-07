@@ -45,20 +45,31 @@ public class BoardListFormAction implements CommandAction{
 			String orAnd = request.getParameter("or_and");
 			String[] checkDate = null;
 			checkDate = request.getParameterValues("date");
+			
+			
+
+			// HttpSession 객체에서 키값 uri로 저장된 문자열 꺼내기
+			// 키값 uri에 저장된 문자열은 현재 클래스에 오기 전에 
+			// 어느 클래스에 있었냐에 대한 정보가 들어 있다.
 			HttpSession session = request.getSession();
 			String uri = (String)session.getAttribute("uri");
 			
 			
-			// HttpSession 객체에서 키값 uri로 저장된 문자열 꺼내기
-			// 키값 uri에 저장된 문자열은 현재 클래스에 오기 전에 
-			// 어느 클래스에 있었냐에 대한 정보가 들어 있다.
+			// 만약 전에 들렸던 클래스가 없거나
+			// 전에 들렸던 클래스가 가칭 boardListForm 라면
+			// Session 객체에 파라미터 값을 저장하기
 			if(uri ==null || uri.equals("boardListForm")) {		
 				session.setAttribute("keyword1",keyword1);
 				session.setAttribute("keyword2",keyword2);
 				session.setAttribute("or_and",orAnd);
 				session.setAttribute("date",checkDate);
-				System.out.println(keyword1+"여기키워드");
-			}else {
+				
+			}
+			
+			// 만약에 전에 들렸던 클래스가 있고
+			// 전에 들렸던 클래스가 boardListForm이 아니라면
+			// Session 객체에서 파라미터값 꺼내서 저장하기
+			else {
 				keyword1 = (String)session.getAttribute("keyword1");
 				keyword2 = (String)session.getAttribute("keyword2");
 				orAnd = (String)session.getAttribute("or_and");
