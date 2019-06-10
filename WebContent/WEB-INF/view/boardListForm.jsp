@@ -16,7 +16,9 @@ $(document).ready(function(){
 	// name=boardContentForm을 가진 form 태그를 안보이게 하기
 	$("[name=boardRegForm], [name=boardContentForm]").hide();
 	
-	
+	$("[name=rowCntPerPage]").change(function(){
+		goSearch();
+	});
 	
 	//alert('${param.date}');
 	//var values = '${param.date}'.split();
@@ -47,7 +49,16 @@ $(document).ready(function(){
 	setTableTrBgColor("boardList",headerColor,evenTrColor,oddTrColor,mouseOverColor);
 	
 	
-	
+	// 페이징 처리 관련 html 소스를 class= pagingNumber 가진 태그 안에 삽입하기
+	$(".pagingNumber").html(
+		getPagingNumber(
+		"${requestScope.boardListAllCnt}", // 검색 결과 총 행 개수
+		"${sessionScope.selectPageNo}", // 선택된 현재 페이지 번호
+		"${sessionScope.rowCntPerPage}", // 페이지 당 출력행의 개수
+		"10", // 페이지 당 보여줄 페이징번호 개수
+		"goSearch();" // 페이지 번호 클릭 실행할 자스 코드
+		)
+	);
 	
 	/*짝수 홀수 배경색 바꾸기
 	//$('#board tr:odd').css('background',oddTrColor);
@@ -105,6 +116,8 @@ $(document).ready(function(){
 	<c:forEach items="${sessionScope.date}" var="date">
 	inputData("date","${date}");
 	</c:forEach>
+	inputData("selectPageNo","${sessionScope.selectPageNo}");
+	inputData("rowCntPerPage","${sessionScope.rowCntPerPage}");
 	 
 	
 	
@@ -129,9 +142,8 @@ $(document).ready(function(){
 		}
 		
 		if(is_empty("keyword1") && is_empty("keyword2") && is_empty("date")){
-			alert("입력된 검색 조건이 모두 없어 검색을 하지 않습니다.");
+			alert("입력된 검색 조건이 모두 없어 모두 검색을 실행합니다.");
 			$(".keyword1,.keyword2").val("");
-			return;
 		}
 		document.boardListForm.submit();
 		//var key1 = $("[name=boardListForm] [name=keyword1]").val();
@@ -183,7 +195,6 @@ $(document).ready(function(){
 <title>게시판</title>
 </head>
 <body onKeyDown="if(event.keyCode==13){goSearch();}">
-	<a href="javascript:location.replace('/z_jsp/loginForm.do')">로그아웃</a>
 	<center>
 		<!-- 키워드 폼 -->
 		<form name="boardListForm" method="post"
@@ -196,12 +207,25 @@ $(document).ready(function(){
 				name="date" id="date2" value="어제">어제 <input type="button"
 				value="검색" onClick="goSearch();"> <input type="button"
 				value="모두검색" onClick="goSearchAll();"><br>
+				<input type="hidden" name="selectPageNo">
+				<select name="rowCntPerPage">
+					<option value="10">10
+					<option value="15">15
+					<option value="20">20
+					<option value="25">25
+					<option value="30">30
+				</select>행보기
 		</form>
 		<table  border = 0>
 			<tr>
 				<td align=right>
 						[총 개수] : ${requestScope.boardListAllCnt} &nbsp;&nbsp;&nbsp;
 						<a href="javascript:goBoardRegForm();">[새 글쓰기]</a>
+			<tr>
+				<th><span class = "pagingNumber"></span>
+				
+					
+				
 			<tr>
 			<td><table class="tbcss2 boardList" id="board" border=0 cellpadding=5 cellspacing=0>
 			<tr>
@@ -213,7 +237,7 @@ $(document).ready(function(){
 						varStatus="loopTagStatus">
 						<tr style="cursor: pointer"
 							onClick="goBoardContentForm(${board.b_no});">
-							<td>${requestScope.boardListAllCnt-loopTagStatus.index}
+							<td>${requestScope.boardListAllCnt-((sessionScope.selectPageNo-1)*sessionScope.rowCntPerPage)-loopTagStatus.index}
 							<td><c:if test="${board.print_level>0}">
 									<c:forEach begin="0" end="${board.print_level}">
 							&nbsp;&nbsp;&nbsp;

@@ -45,6 +45,16 @@ public class BoardListFormAction implements CommandAction{
 			String orAnd = request.getParameter("or_and");
 			String[] checkDate = null;
 			checkDate = request.getParameterValues("date");
+			String selectPageNo = request.getParameter("selectPageNo");
+			if(selectPageNo==null || selectPageNo.length()==0) {
+				selectPageNo = "1";
+			}
+			String rowCntPerPage = request.getParameter("rowCntPerPage");
+
+			if(rowCntPerPage==null || rowCntPerPage.length()==0) {
+				rowCntPerPage = "10";
+			}
+			
 			
 			
 
@@ -63,6 +73,8 @@ public class BoardListFormAction implements CommandAction{
 				session.setAttribute("keyword2",keyword2);
 				session.setAttribute("or_and",orAnd);
 				session.setAttribute("date",checkDate);
+				session.setAttribute("rowCntPerPage", rowCntPerPage);
+				session.setAttribute("selectPageNo", selectPageNo);
 				
 			}
 			
@@ -74,6 +86,8 @@ public class BoardListFormAction implements CommandAction{
 				keyword2 = (String)session.getAttribute("keyword2");
 				orAnd = (String)session.getAttribute("or_and");
 				checkDate = (String[])session.getAttribute("date");
+				rowCntPerPage = (String)session.getAttribute("rowCntPerPage");
+				selectPageNo=(String)session.getAttribute("selectPageNo");
 			}
 			session.setAttribute("uri","boardListForm");
 			//BoardSearchDTO에 파라미터값들을 저장하기
@@ -82,8 +96,13 @@ public class BoardListFormAction implements CommandAction{
 			boardSearchDTO.setKeyword2(keyword2);
 			boardSearchDTO.setOr_and(orAnd);
 			boardSearchDTO.setDate(checkDate);
-
-			System.out.println(keyword1);
+			boardSearchDTO.setRowCntPerPage(Integer.parseInt(rowCntPerPage,10));
+			boardSearchDTO.setSelectPageNo(Integer.parseInt(selectPageNo,10));
+			
+			System.out.println("rowCntPerPage : "+rowCntPerPage );
+			System.out.println("selectPageNo : "+selectPageNo );
+				
+			System.out.println("keyword1+"+keyword1);
 			/* 2가지 오버로딩
 			 List<Map<String,String>> boardList = null;
 			if(keyword!=null && keyword.length()>0) {
@@ -94,10 +113,21 @@ public class BoardListFormAction implements CommandAction{
 			}
 			 */
 			int boardListAllCnt = boardDAO.getBoardListAllCnt(boardSearchDTO);
-			List<Map<String,String>> boardList = boardDAO.getBoardList3(boardSearchDTO);
+			int lastPageNo = (boardListAllCnt / boardSearchDTO.getRowCntPerPage())+1;
+			if( lastPageNo < boardSearchDTO.getSelectPageNo() ){
+			//if( boardListAllCnt<=(boardSearchDTO.getSelectPageNo()-1)*boardSearchDTO.getRowCntPerPage() ){
+
+				session.setAttribute("selectPageNo", 1);
+				boardSearchDTO.setSelectPageNo(1);
+				
+			}
+			List<Map<String,String>> boardList = boardDAO.getBoardList4(boardSearchDTO);
 			request.setAttribute("boardList", boardList);
 
 			request.setAttribute("boardListAllCnt", boardListAllCnt);
+	
+			
+			System.out.println("selectPageNo :" + session.getAttribute("selectPageNo"));
 			//request.setAttribute("keyword", keyword);
 
 

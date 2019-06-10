@@ -5,7 +5,8 @@ public class BoardSearchDTO {
 	private String keyword2;
 	private String or_and;
 	private String[] date;
-	
+	private int selectPageNo;
+	private int rowCntPerPage;
 	public String getKeyword1() {
 		return keyword1;
 	}
@@ -29,6 +30,18 @@ public class BoardSearchDTO {
 	}
 	public void setDate(String[] date) {
 		this.date = date;
+	}
+	public int getSelectPageNo() {
+		return selectPageNo;
+	}
+	public void setSelectPageNo(int selectPageNo) {
+		this.selectPageNo = selectPageNo;
+	}
+	public int getRowCntPerPage() {
+		return rowCntPerPage;
+	}
+	public void setRowCntPerPage(int rowCntPerPage) {
+		this.rowCntPerPage = rowCntPerPage;
 	}
 	
 }
