@@ -6,6 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@include file="common.jsp" %>
 <%@include file="checkLogin.jsp" %>
+<%@include file="menubar.jsp"%>
 <script src="/z_jsp/resources/jquery-1.11.0.min.js"></script>
 
 <script>

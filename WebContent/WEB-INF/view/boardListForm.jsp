@@ -8,6 +8,7 @@
 <!--  만약 세션객체에 admin_id라는 키값으로 저장된 놈이 없다면.. -->
 
 <%@include file="checkLogin.jsp"%>
+<%@include file="menubar.jsp"%>
 <script>
 $(document).ready(function(){
 	

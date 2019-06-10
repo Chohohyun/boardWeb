@@ -7,6 +7,7 @@
 
 <%@include file="checkLogin.jsp" %>
 <%@include file="common.jsp" %>
+<%@include file="menubar.jsp"%>
 
 <script>
 	function checkBoardRegForm() {
