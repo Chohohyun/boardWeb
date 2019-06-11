@@ -113,11 +113,16 @@ public class BoardListFormAction implements CommandAction{
 			}
 			 */
 			int boardListAllCnt = boardDAO.getBoardListAllCnt(boardSearchDTO);
-			int lastPageNo = (boardListAllCnt / boardSearchDTO.getRowCntPerPage())+1;
+			int lastPageNo = boardListAllCnt / boardSearchDTO.getRowCntPerPage();
+			if( boardListAllCnt % boardSearchDTO.getRowCntPerPage()>0) {
+				lastPageNo++;
+			}
+			//lastPageNo += boardListAllCnt % boardSearchDTO.getRowCntPerPage()>0?1:0;
+			System.out.println();
 			if( lastPageNo < boardSearchDTO.getSelectPageNo() ){
 			//if( boardListAllCnt<=(boardSearchDTO.getSelectPageNo()-1)*boardSearchDTO.getRowCntPerPage() ){
 
-				session.setAttribute("selectPageNo", 1);
+				session.setAttribute("selectPageNo", "1");
 				boardSearchDTO.setSelectPageNo(1);
 				
 			}

@@ -142,7 +142,7 @@ $(document).ready(function(){
 		}
 		
 		if(is_empty("keyword1") && is_empty("keyword2") && is_empty("date")){
-			alert("입력된 검색 조건이 모두 없어 모두 검색을 실행합니다.");
+			//alert("입력된 검색 조건이 모두 없어 모두 검색을 실행합니다.");
 			$(".keyword1,.keyword2").val("");
 		}
 		document.boardListForm.submit();

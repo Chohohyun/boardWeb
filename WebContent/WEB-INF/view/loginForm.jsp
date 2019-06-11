@@ -9,8 +9,13 @@
 <script>
 	$(document).ready(function() {
 		
-		$(".admin_id").val("abc");
-		$(".pwd").val("abc123");
+		//$(".admin_id").val("abc");
+		//$(".pwd").val("abc123");
+		inputData("admin_id",'${cookie.admin_id.value}');
+		inputData("pwd",'${cookie.pwd.value}');
+		<c:if test="${!empty cookie.admin_id.value}">
+			inputData("is_login","y")
+		</c:if>
 		$("[name=loginForm] .login").click(function() {
 			checkLoginForm();
 		});
@@ -86,6 +91,7 @@
 								<td><input type="password" class="pwd" name="pwd" size="20">
 						</table>
 						<div style="height: 6"></div> <input type="button" value="로그인" class="login">
+						<input type="checkbox" name="is_login" value="y"> 아이디,암호 기억
 			</table>
 		</form>
 	</center>

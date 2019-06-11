@@ -14,6 +14,7 @@ public class LoginProcAction implements CommandAction {
 			// 파라미터값을 꺼낸다
 			String admin_id = request.getParameter("admin_id");
 			String pwd = request.getParameter("pwd");
+			String is_login = request.getParameter("is_login");
 			// oracle db에서 아이디의 존재 개수 얻기
 			// 일단 아이디 존재 개수가 1개라고 가정한다.
 			
@@ -30,6 +31,30 @@ public class LoginProcAction implements CommandAction {
 				
 				// HttpSession 객체에 아이디 저장하기
 				session.setAttribute("admin_id", admin_id);
+				
+				// 아이디 암호 저장 의사가 없을 경우 아이디 암호 관련 쿠키를 null로 덮어씌우고 수명 없애기
+				// 그리고 이 쿠키를 HttpServletResponse 객체에 저장하기
+				// --------------------------------------------------------------
+				if(is_login==null) {
+					// Cookie 객체 생성하고 쿠키명 cookie, 쿠기값 null로 설정
+					Cookie cookie1 = new Cookie("admin_id",null);
+					cookie1.setMaxAge(0);
+					response.addCookie(cookie1);
+					Cookie cookie2 = new Cookie("pwd",null);
+					cookie2.setMaxAge(0);
+					response.addCookie(cookie2);
+				}
+				else {
+					// Cookie 객체 생성하고 쿠키명 admin_id, 쿠기값 admin_id, 수명 60*60*24로 설정
+					Cookie cookie1 = new Cookie("admin_id",admin_id);
+					cookie1.setMaxAge(60*60*24);
+					response.addCookie(cookie1);
+
+					// Cookie 객체 생성하고 쿠키명 pwd, 쿠기값 pwd, 수명 60*60*24로 설정
+					Cookie cookie2 = new Cookie("pwd",pwd);
+					cookie2.setMaxAge(60*60*24);
+					response.addCookie(cookie2);
+				}
 			}
 			// Httpservletrequest 객체에 로그인 아이디의 존재 개수 저장하기
 			// Httpservletrequest 객체에 저장된 데이터는 호출되는
