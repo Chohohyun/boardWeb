@@ -37,24 +37,32 @@ public class LoginProcAction implements CommandAction {
 				// --------------------------------------------------------------
 				if(is_login==null) {
 					// Cookie 객체 생성하고 쿠키명 cookie, 쿠기값 null로 설정
-					Cookie cookie1 = new Cookie("admin_id",null);
+					/*Cookie cookie1 = new Cookie("admin_id",null);
 					cookie1.setMaxAge(0);
 					response.addCookie(cookie1);
 					Cookie cookie2 = new Cookie("pwd",null);
 					cookie2.setMaxAge(0);
-					response.addCookie(cookie2);
+					response.addCookie(cookie2);*/
+					
+					Util.addCookie(response, "admin_id", null, 0);
+					Util.addCookie(response, "pwd", null, 0);
 				}
 				else {
 					// Cookie 객체 생성하고 쿠키명 admin_id, 쿠기값 admin_id, 수명 60*60*24로 설정
-					Cookie cookie1 = new Cookie("admin_id",admin_id);
+					/*Cookie cookie1 = new Cookie("admin_id",admin_id);
 					cookie1.setMaxAge(60*60*24);
 					response.addCookie(cookie1);
-
+					
 					// Cookie 객체 생성하고 쿠키명 pwd, 쿠기값 pwd, 수명 60*60*24로 설정
 					Cookie cookie2 = new Cookie("pwd",pwd);
 					cookie2.setMaxAge(60*60*24);
-					response.addCookie(cookie2);
+					response.addCookie(cookie2);*/
+					
+
+					Util.addCookie(response, "admin_id", admin_id, 60*60*24);
+					Util.addCookie(response, "pwd", pwd, 60*60*24);
 				}
+				System.out.println(pwd);
 			}
 			// Httpservletrequest 객체에 로그인 아이디의 존재 개수 저장하기
 			// Httpservletrequest 객체에 저장된 데이터는 호출되는

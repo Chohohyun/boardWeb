@@ -179,6 +179,7 @@ $(document).ready(function(){
 		
 		// 공용함수 setEmpty2 활용
 		setEmpty2( "[name=keyword1], [name=keyword2], [name=date]");
+		inputData("selectPageNo","1");
 		document.boardListForm.submit();
 	}
 </script>

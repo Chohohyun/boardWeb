@@ -46,13 +46,15 @@ public class BoardListFormAction implements CommandAction{
 			String[] checkDate = null;
 			checkDate = request.getParameterValues("date");
 			String selectPageNo = request.getParameter("selectPageNo");
-			if(selectPageNo==null || selectPageNo.length()==0) {
-				selectPageNo = "1";
+			//if(selectPageNo==null || selectPageNo.length()==0) {
+			if(Util.isEmpty(selectPageNo)) {	
+			selectPageNo = "1";
 			}
 			String rowCntPerPage = request.getParameter("rowCntPerPage");
 
-			if(rowCntPerPage==null || rowCntPerPage.length()==0) {
-				rowCntPerPage = "10";
+			//if(rowCntPerPage==null || rowCntPerPage.length()==0) {
+			if(Util.isEmpty(rowCntPerPage)) {	
+			rowCntPerPage = "10";
 			}
 			
 			
