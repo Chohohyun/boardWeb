@@ -224,9 +224,6 @@ $(document).ready(function(){
 						<a href="javascript:goBoardRegForm();">[새 글쓰기]</a>
 			<tr>
 				<th><span class = "pagingNumber"></span>
-				
-					
-				
 			<tr>
 			<td><table class="tbcss2 boardList" id="board" border=0 cellpadding=5 cellspacing=0>
 			<tr>
@@ -234,7 +231,19 @@ $(document).ready(function(){
 				<th>제목
 				<th>글쓴이
 				<th>등록일
-				<th>조회수 <c:forEach items="${boardList}" var="board"
+				<th>조회수 
+				<!--  HttpServletRequest 객체에 boardList 라는 키값으로 저장된 -->
+				<!--  ArrayList<HashMap<String,String>> 객체안의 HasgMap<String,String> 들을 -->
+				<!--  자바 지역변수 board에 저장하고 반복문 안으로 들어가서 -->
+				<!--  달러{지역변수board.HashMap객체키값명} 으로 표현하고 있다.-->
+				<!--  반복문 돌때 마다 자바 지역변수 board에는 n번째 HashMap<String,String> 객체가 저장된다. -->
+				<!--  반복문 돌때마다 LoopTagStatus 객체의 count라는 속성변수안의 데이터를 꺼내어 -->
+				<!--  출력한다. 출력 시 형식은 EL 로 달러{loopTagStatus.count} 로 한다. -->
+				<!--  반복문 돌때마다 LoopTagStatus 객체의 count 라는 속성변수 안의 데이터는 1부터 -->
+				<!-- 시작해서 1씩 증가하면서 반복문 안에서 표현된다. -->
+				<!--  현재 LoopTagStatus 객체의 메위주는 loopTagStatus라는 지역변수에 저장되어있다.-->
+				
+				<c:forEach items="${boardList}" var="board"
 						varStatus="loopTagStatus">
 						<tr style="cursor: pointer"
 							onClick="goBoardContentForm(${board.b_no});">

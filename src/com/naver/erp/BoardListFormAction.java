@@ -40,6 +40,13 @@ public class BoardListFormAction implements CommandAction{
 			boardList.add(article);
 			 */
 			// httpserveletrequest 객체에 게시판 목록 저장하기
+			
+			
+
+			// 파라미터명이 1개고 파라미터값이 1개면 getParameter 라는 메소드를
+			// 사용한다.
+			// 파라미터명이 1개고 파라미터값이 2개 이상이면 getParameterValues 라는 메소드를
+			// 사용한다.
 			String keyword1 = request.getParameter("keyword1");
 			String keyword2 = request.getParameter("keyword2");
 			String orAnd = request.getParameter("or_and");
@@ -93,6 +100,8 @@ public class BoardListFormAction implements CommandAction{
 			}
 			session.setAttribute("uri","boardListForm");
 			//BoardSearchDTO에 파라미터값들을 저장하기
+			// BoardSearchDTO 객체에는 검색 조건들이 들어있다.
+			// BoardDAO 객체의 메소드 호출할 때 넘겨줄 예정
 			BoardSearchDTO boardSearchDTO = new BoardSearchDTO();
 			boardSearchDTO.setKeyword1(keyword1);
 			boardSearchDTO.setKeyword2(keyword2);

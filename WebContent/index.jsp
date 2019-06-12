@@ -11,8 +11,9 @@
 		// http://localhost:8088/z_jsp/index.jsp 실행 시 
 		// jsp를 html로 변환하여 화면에 출력
 		// location.replace 실행되어 loginForm.do로 이동
-		
 		location.replace("/z_jsp/loginForm.do")
+		
+		
 	</script>
 </body>
 </html>
