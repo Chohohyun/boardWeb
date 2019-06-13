@@ -8,7 +8,7 @@
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<link href="/z_jsp/resources/common.css" rel="stylesheet" type="text/css">
+<link href="/z_jsp/resources/common.css?ver=<%=Math.random()%>" rel="stylesheet" type="text/css">
 
 <!-- 사용자 정의 태그인 JSTL의 C 코어태그를 사용하여 변수 선언하기 -->
 <!-- 변수 thColor 선언하고 데이터 #708090 저장하기 -->
@@ -18,4 +18,4 @@
 <c:set var="evenTrColor" value="#white"/>
 <c:set var="mouseOverColor" value="#D0E0F4"/>
 
-<script src="/z_jsp/resources/common.js"></script>
+<script src="/z_jsp/resources/common.js?ver=<%=Math.random()%>"></script>

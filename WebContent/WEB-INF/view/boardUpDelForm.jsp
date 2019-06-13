@@ -166,8 +166,9 @@
 
 			<form name="boardListForm" method="post"
 				action="/z_jsp/boardListForm.do"></form>
-				
-			
+				<br>
+			<input type="button" value="html정보보기"
+					onClick="print_html_info();">
 		</center>
 	</center>
 </body>

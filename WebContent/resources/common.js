@@ -372,6 +372,54 @@ function printPagingNumber(
 	);
 }
 	
+function print_html_info(   ){
+	$('.jsp_src').remove();
+	var formObjs = $("form");
+	//---------------------------------------------------------
+	for( var i=0 ; i<formObjs.length ; i++ ){
+			var html = [];
+			var cnt = 0;
+			var name_bank = [];
+			var formObj = formObjs.eq(i);
+			html.push("<caption>폼태그명 => "+ formObj.attr("name") + "</caption>" );
+			formObj.find("input,select,textarea").not("[type=button]").each(function(ii){
+				var thisObj = $(this);
+				var type = "";
+				var name = thisObj.attr("name");
+				var value = thisObj.val();
+				//---
+				if( (":" + name_bank.join(":") + ":").indexOf(":"+name+":")>=0 ) { return; }
+				else                               { name_bank.push(name); }
+				//---
+				if( thisObj.is("select") )         { type = "select"; }
+				else if( thisObj.is("textarea") )  { type = "textarea"; }
+				else if( thisObj.is(":checkbox") ) { type = "checkbox"; }
+				else if( thisObj.is(":radio") )    { type = "radio"; }
+				else                               { type = thisObj.attr("type"); }
+				//---
+				if( thisObj.is(":checkbox") || thisObj.is(":radio") ){
+					var tmp = "";
+					formObj.find("[name="+name+"]").filter(":checked").each(function(){
+						tmp = tmp + "," + $(this).val();
+					})
+					value = tmp;
+					if( value.indexOf(",")==0 ) { value = value.substring(1); }
+				}
+				//---
+				if( cnt++%2==1)   { html.push("<tr bgcolor=bluelight>"); }
+				else         { html.push("<tr>"); }
+				html.push("<th>"+ (type==""?" ":type) );
+				html.push("<th>"+ (name==""?" ":name)  );
+				html.push("<th>"+ (value==""?" ":value) ) ;
+				//-------------
+				//$("[name="+name+"]").remove();
+			});
+			$("body").append( "<div class=jsp_src><hr><table border=1 align=center cellpadding=3><tr bgcolor=gray><th>타입<th>이름<th>값"+ html.join("") + "</table></div>")
+	}
+}
 	
+	
+
+
 	
 	
