@@ -73,7 +73,7 @@ public class LoginProcAction implements CommandAction {
 			System.out.println("LoginProcAction 클래스에서 에러 발생");
 		}
 		// 호출할 jsp 페이지명을 controllerAction 객체에 문자열로 리턴하기
-		// controllerAction 객체는 이 문자열에 해당하는 jsp페이지를 호출
+		// controllerAction 객체는 이 문자열에 해당하는 jsp페이지를 호출';
 		// 호출하는 jsp 페이지로 리퀘스트, 리스폰, 세션 객체도 이동
 		return "/WEB-INF/view/loginProc.jsp";
 	}

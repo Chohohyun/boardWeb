@@ -8,20 +8,38 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 public class BoardDAO {
+	
+	// BoardDAO 객체를 생성하고 이 객체의 메위주를 저장한 속성변수 instance 를 선언하기
+	
+	// 이 속성변수 static을 붙임으로써 생기는 일
+	// => <1> 객체 생성 없이 클래스명.속성변수명으로 호출이 가능하다.
+	// => <2> 호출한 애들이 값을 공유
 	private static BoardDAO instance = new BoardDAO();
+	
+	// Connection 객체의 메위주가 저장될 변수 connection을 속성변수로 선언하기
+	// Connection 객체란?
+	// => JDBC API중의 하나로써 DB와 연결, 연결 상태를 관리하는 객체이다.
 	private static Connection connection = null;
-
+	
+	
+	// BoardDAO 객체 리턴 메소드 선언
 	public static BoardDAO getInstance() {
 		return instance;
 	}
-
+	
+	// Connection 객체를 생성하여 리턴하는 메소드 선언
 	private Connection getConnection( ) throws Exception{
+		// 오라클 주소, 아이디, 암호를 변수에 저장
 		String url = "jdbc:oracle:thin:@127.0.0.1:1521:XE";
 		String id = "system";
 		String pw = "123";
-
+		// Class 클래스의 forName 이란 메소드를 호출하여
+		// 오라클 드라이버 로딩, 오라클 연결을 주도하는 클래스를 객체화 시키기
 		Class.forName("oracle.jdbc.driver.OracleDriver");
-
+		// DriverManager 클래스의 getConnection 이란 메소드를 호출하여
+		// Connection 객체를 생성하여 리턴하기
+		// Connection 객체가 생성되야 원하는 db와 연결이 되고
+		// 입력 수정 삭제 검색 sql 구문을 날릴 수 있게 된다.
 		return DriverManager.getConnection(url,id,pw);
 	}
 	public int getBoardListAllCnt(BoardSearchDTO boardSearchDTO) throws Exception{
